@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.retry.annotation.EnableRetry;
 
-import com.seidor.comerzzia.core.io.Base64ProtocolResolver;
+import com.seidor.comerzzia.connector.core.io.Base64ProtocolResolver;
 
 @EnableRetry
 @SpringBootApplication

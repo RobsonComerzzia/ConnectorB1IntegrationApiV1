@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.seidor.comerzzia.domain.exception.ParametroGeralNotFoundException;
-import com.seidor.comerzzia.domain.model.master.ParametroGeral;
-import com.seidor.comerzzia.domain.repository.master.ParametroGeralRepository;
+import com.seidor.comerzzia.connector.domain.model.ParametroGeral;
+import com.seidor.comerzzia.connector.domain.repository.ParametroGeralRepository;
+import com.seidor.comerzzia.connector.exception.ParametroGeralNotFoundException;
 
 @Service
 public class ParametroGeralServiceImpl implements ParametroGeralService {

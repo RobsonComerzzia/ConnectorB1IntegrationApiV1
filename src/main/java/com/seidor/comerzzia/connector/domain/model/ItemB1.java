@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 
-import com.seidor.comerzzia.api.v1.util.StringUtils;
+import com.seidor.comerzzia.connector.util.StringUtils;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

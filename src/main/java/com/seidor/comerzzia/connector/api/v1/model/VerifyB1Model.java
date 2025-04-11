@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.seidor.comerzzia.api.v1.model.input.VerifyB1DataModel;
+import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1DataModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

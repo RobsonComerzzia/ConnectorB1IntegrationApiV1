@@ -6,15 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import com.seidor.comerzzia.api.v1.model.input.ArticulosImpuestoInput;
-import com.seidor.comerzzia.api.v1.model.input.ArticulosInput;
-import com.seidor.comerzzia.api.v1.util.reflections.ReflectionsUtils;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.service.IntegracaoB1CmzProcessService;
 import com.seidor.comerzzia.connector.domain.service.IntegrarB1LoadDataService;
 import com.seidor.comerzzia.connector.domain.service.UpdateFromMasterToComerzziaService;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
-
+import com.seidor.comerzzia.connector.util.reflections.ReflectionsUtils;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -4,8 +4,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import com.seidor.comerzzia.api.v1.model.input.ArticulosImpuestoInput;
-import com.seidor.comerzzia.api.v1.util.Utils;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
+import com.seidor.comerzzia.connector.util.Utils;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

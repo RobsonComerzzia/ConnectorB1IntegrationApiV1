@@ -1,6 +1,6 @@
 package com.seidor.comerzzia.connector.domain.service;
 
-import com.seidor.comerzzia.domain.model.master.ParametroGeral;
+import com.seidor.comerzzia.connector.domain.model.ParametroGeral;
 
 public interface ParametroGeralService {
 

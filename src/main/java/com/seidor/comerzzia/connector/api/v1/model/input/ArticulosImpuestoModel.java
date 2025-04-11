@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.seidor.comerzzia.api.v1.model.ImpTratamientoModel;
+import com.seidor.comerzzia.connector.api.v1.model.ImpTratamientoModel;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;

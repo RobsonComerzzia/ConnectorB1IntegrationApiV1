@@ -13,8 +13,8 @@ import com.seidor.comerzzia.connector.api.v1.model.VerifyB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.input.GuidB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.SetReceivedB1Input;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
-import com.seidor.comerzzia.constant.Constants;
-import com.seidor.comerzzia.domain.exception.FileNameNotFoundException;
+import com.seidor.comerzzia.connector.constants.Constants;
+import com.seidor.comerzzia.connector.exception.FileNameNotFoundException;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

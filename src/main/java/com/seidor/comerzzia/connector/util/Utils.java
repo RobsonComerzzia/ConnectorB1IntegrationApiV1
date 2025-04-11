@@ -5,9 +5,7 @@ import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
-
-import com.seidor.comerzzia.constant.Constants;
+import com.seidor.comerzzia.connector.constants.Constants;
 
 public abstract class Utils {
 	
