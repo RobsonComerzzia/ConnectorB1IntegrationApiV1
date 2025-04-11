@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  connector-integration-api-v1:
+    image: robsoncn/connector-integration-api-v1
+    environment:
+      COMERZZIA_DB_URL: jdbc:mysql://127.0.0.1:3306/brasil50_demo?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+      MASTER_INTEGRATION_DB_URL: jdbc:mysql://127.0.0.1:3306/cmz_master?useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+      INTEGRATION_SERVER: http://127.0.0.1:8091
+      COMERZZIA_DB_PASS: master
+      COMERZZIA_DB_USER: root
+      INTEGRATION_JWT_JKS_ALIAS: cmzmaster
+      INTEGRATION_JWT_JKS_PASSWORD: 123456
+      SPRING_PROFILES_ACTIVE: development
+    ports:
+      - "8091:8091"
+    network_mode: host
