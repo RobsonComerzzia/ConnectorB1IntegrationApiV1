@@ -24,7 +24,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
     @Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		
-		log.info("Api master rodando na porta : " + env.getProperty("local.server.port"));
+		log.info("Connector Api rodando na porta : " + env.getProperty("local.server.port"));
 		
 		
                

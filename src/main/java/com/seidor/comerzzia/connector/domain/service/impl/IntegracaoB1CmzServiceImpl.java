@@ -29,7 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class IntegracaoB1ErpToCmzServiceImpl implements IntegracaoB1CmzService<IntegracaoB1Model> {
+public class IntegracaoB1CmzServiceImpl implements IntegracaoB1CmzService<IntegracaoB1Model> {
 	
 	@Value("${b1.token}")
 	private String token;
@@ -41,7 +41,7 @@ public class IntegracaoB1ErpToCmzServiceImpl implements IntegracaoB1CmzService<I
 	private String urlBaseB1;
 	
 	@Value("${master.api.integracao.item.url}")
-	private String urlMasterItem = "";
+	private String urlMasterItem;
 	
 	@Autowired
 	private RestClientB1<GuidB1ModelInput, GuidB1Model, VerifyB1ModelInput, VerifyB1Model> restClient;

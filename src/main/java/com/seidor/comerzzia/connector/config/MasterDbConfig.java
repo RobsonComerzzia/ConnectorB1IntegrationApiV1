@@ -22,7 +22,7 @@ import jakarta.persistence.EntityManagerFactory;
 @EnableJpaRepositories(
   entityManagerFactoryRef = "primaryEntityManagerFactory",
   transactionManagerRef = "primaryTransactionManager",
-  basePackages = { "com.seidor.comerzzia.domain.repository.master" }
+  basePackages = { "com.seidor.comerzzia.connector.domain.repository" }
 )
 public class MasterDbConfig {
 	
@@ -31,6 +31,16 @@ public class MasterDbConfig {
 	@ConfigurationProperties(prefix="spring.datasource")
 	public DataSource primaryDataSource() {
 		return DataSourceBuilder.create().build();
+	}
+
+	@Primary
+	@Bean(name = "primaryEntityManagerFactory")
+	public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(EntityManagerFactoryBuilder builder,
+			@Qualifier("primaryDataSource") DataSource primaryDataSource) {
+		return builder
+				.dataSource(primaryDataSource)
+				.packages("com.seidor.comerzzia.connector.domain.model")
+				.build();
 	}
 
 	@Primary
