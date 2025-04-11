@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
-import com.seidor.comerzzia.connector.util.Utils;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +20,10 @@ public class RestClientMasterArticulosImpl implements RestClientMaster<Articulos
 	public void execute(ArticulosInput body, String url, String token) {
 		
 		RestClient restClient = RestClient.create();
-		String urlFinal = null;
-		
-		urlFinal = Utils.transformURL(url);
 		
 		try {
 			restClient.post()
-			.uri(urlFinal)
+			.uri(url)
 			.body(body)
 			//.header(Constants.TOKEN, token)
 			.accept(MediaType.APPLICATION_JSON)

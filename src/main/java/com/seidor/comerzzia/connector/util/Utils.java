@@ -1,11 +1,7 @@
 package com.seidor.comerzzia.connector.util;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
-
-import com.seidor.comerzzia.connector.constants.Constants;
 
 public abstract class Utils {
 	
@@ -35,21 +31,6 @@ public abstract class Utils {
 		Integer totalPages = Math.round(pages);
 		
 		return totalPages;
-	}
-	
-	public static String transformURL(String url) {
-		
-		String urlFinal = null;
-		
-		try {
-			String hostname = InetAddress.getLocalHost().getHostName() + ":443";
-			urlFinal = Constants.PROTOCOL_HTTP + hostname + url;
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		
-		return urlFinal;
-		
 	}
 
 }
