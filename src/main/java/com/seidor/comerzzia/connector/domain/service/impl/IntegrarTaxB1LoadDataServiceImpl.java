@@ -21,7 +21,6 @@ import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
 import com.seidor.comerzzia.connector.rest.client.RestClientB1;
 import com.seidor.comerzzia.connector.util.json.ReadJson;
 
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
