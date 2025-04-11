@@ -1,0 +1,23 @@
+package com.seidor.comerzzia.connector.constants;
+
+public final class Constants {
+	
+	public static String PROCESSED = "PROCESSED";
+	
+	public static String PENDING = "PENDING";
+	
+	public static String ERROR = "ERROR";
+	
+	public static String NO_DATA = "NO_DATA";
+	
+	public static String UTF8 = "UTF-8";
+	
+	public static String API_KEY = "x-api-key";
+	
+	public static String GUID = "guid";
+	
+	public static String TOKEN = "token";
+	
+	public static String PROTOCOL_HTTP = "http://";
+
+}
