@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.seidor.comerzzia.connector.api.controller.openapi.IntegracaoB1ErpToCmzControllerOpenApi;
 import com.seidor.comerzzia.connector.api.v1.model.IntegracaoB1Model;
 import com.seidor.comerzzia.connector.core.security.CheckSecurity;
-import com.seidor.comerzzia.connector.domain.service.IntegracaoB1CmzService;
+import com.seidor.comerzzia.connector.domain.service.IntegrationProcessService;
+import com.seidor.comerzzia.connector.domain.service.StartProcessService;
 
 
 @RestController
@@ -19,7 +20,7 @@ import com.seidor.comerzzia.connector.domain.service.IntegracaoB1CmzService;
 public class IntegracaoB1ErpToCmzController implements IntegracaoB1ErpToCmzControllerOpenApi<IntegracaoB1Model> {
 
 	@Autowired
-	private IntegracaoB1CmzService<IntegracaoB1Model> integracaoB1CmzService;
+	private StartProcessService startProcessService;
 
 	@CheckSecurity.AllCliendIdPermissioes.CanReadWriteAndIsAuthenticated
 	@Override
@@ -27,7 +28,7 @@ public class IntegracaoB1ErpToCmzController implements IntegracaoB1ErpToCmzContr
 	@ResponseStatus(HttpStatus.OK)
 	public IntegracaoB1Model insert() {
 
-		IntegracaoB1Model response = integracaoB1CmzService.startProcess();
+		IntegracaoB1Model response = startProcessService.startProcess();
 		
 		return response;
 		

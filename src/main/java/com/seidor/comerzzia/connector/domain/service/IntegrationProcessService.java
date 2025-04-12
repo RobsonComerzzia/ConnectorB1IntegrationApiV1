@@ -1,16 +1,18 @@
-package com.seidor.comerzzia.connector.domain.service.impl;
+package com.seidor.comerzzia.connector.domain.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.v1.model.GuidB1Model;
-import com.seidor.comerzzia.connector.api.v1.model.IntegracaoB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.VerifyB1Model;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.AuthenticationInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.GuidB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ItemsGravarInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemInput;
@@ -19,17 +21,21 @@ import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceListInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonPartnerInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonTaxInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
-import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
-import com.seidor.comerzzia.connector.domain.service.IntegracaoB1CmzProcessService;
-import com.seidor.comerzzia.connector.domain.service.IntegracaoB1CmzService;
+import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientB1;
+import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
+import com.seidor.comerzzia.connector.rest.client.RestClientToken;
 import com.seidor.comerzzia.connector.util.json.ReadJson;
+import com.seidor.comerzzia.connector.util.reflections.ReflectionsUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class IntegracaoB1CmzServiceImpl implements IntegracaoB1CmzService<IntegracaoB1Model> {
+public class IntegrationProcessService extends OauthService {
+	
+	@Value("${master.api.integracao.item.url}")
+	private String urlMasterItem;
 	
 	@Value("${b1.token}")
 	private String token;
@@ -39,9 +45,6 @@ public class IntegracaoB1CmzServiceImpl implements IntegracaoB1CmzService<Integr
 	
 	@Value("${url.base.b1}")
 	private String urlBaseB1;
-	
-	@Value("${master.api.integracao.item.url}")
-	private String urlMasterItem;
 	
 	@Autowired
 	private RestClientB1<GuidB1ModelInput, GuidB1Model, VerifyB1ModelInput, VerifyB1Model> restClient;
@@ -71,19 +74,50 @@ public class IntegracaoB1CmzServiceImpl implements IntegracaoB1CmzService<Integr
 	private GravarDadosB1Service<List<JsonPartnerInput>> gravarDadosPartnerService;
 	
 	@Autowired
-	private IntegracaoB1CmzProcessService integracaoB1CmzProcessService;
+	private ItemB1Repository itemB1Repository;
 	
-	@Override
-	public IntegracaoB1Model startProcess() {
+	@Autowired
+	private RestClientMaster<ArticulosInput> restClientArticulos;
+	
+	@Autowired
+	private RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp;
+	
+	@Async("asyncB1Executor")
+	public CompletableFuture<Void> processIntegration() {
 		
-		IntegracaoB1Model response = IntegracaoB1Model.builder()
-				.protocol(UUID.randomUUID().toString())
-				.dateTimeRequest(LocalDateTime.now())
-				.build();
+		log.info("[IntegracaoB1CmzProcessService] - Atualizando bases de dados Master...");
 		
-		integracaoB1CmzProcessService.processIntegration(this.loadTypes(), this.loadValues(), urlMasterItem);
+		this.updateDataMaster(this.loadTypes(), this.loadValues());
+			
+		log.info("[IntegracaoB1CmzProcessService] - Atualizando bases de dados Comerzzia...");
 		
-		return response;
+		this.updateDataComerzzia(this.urlMasterItem);
+	    
+	    log.info("[IntegracaoB1CmzProcessService] - Processo finalizado com sucesso.");
+	    
+	    return CompletableFuture.<Void>completedFuture(null);
+	}
+	
+	private void updateDataMaster(Class<?>[] types, Object[] values) {
+		
+		ReflectionsUtils.executeVoid(IntegrarB1LoadDataService.class, types, values, "loadData");
+		
+	}
+	
+	private void updateDataComerzzia(String urlMaster) {
+		
+		Object[] valuesParamMethod = { urlMaster, null };
+		Class<?>[] typesParamMethod = { String.class, String.class };
+		Object[] valuesClassConstructor= { itemB1Repository, restClientArticulos, restClientArticulosImp };
+		Class<?>[] typesClassConstructor = { ItemB1Repository.class, RestClientMaster.class, RestClientMaster.class };
+		
+		ReflectionsUtils.executeVoid(UpdateFromMasterToComerzziaService.class
+				, typesClassConstructor
+				, valuesClassConstructor
+				, "invokeApiComerzzia"
+				, typesParamMethod
+				, valuesParamMethod);
+		
 	}
 	
 	private Class<?>[] loadTypes(){
@@ -126,5 +160,4 @@ public class IntegracaoB1CmzServiceImpl implements IntegracaoB1CmzService<Integr
 		return values;
 	}
 
-	
 }

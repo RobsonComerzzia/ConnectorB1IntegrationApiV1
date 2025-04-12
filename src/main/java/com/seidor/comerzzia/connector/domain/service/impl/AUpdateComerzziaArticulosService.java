@@ -16,19 +16,15 @@ import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 public class AUpdateComerzziaArticulosService extends ConstructorsAbstract {
 
 	public AUpdateComerzziaArticulosService(
-			
 			ItemB1Repository itemB1Repository,
-			
 			RestClientMaster<ArticulosInput> restClientArticulos,
-			
-			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp
-			
-			) {
+			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp) {
 		super(itemB1Repository, restClientArticulos, restClientArticulosImp);
+		
 	}
 
 	@Override
-	public void invokeApiComerzzia(String url) {
+	public void invokeApiComerzzia(String url, String token) {
 		
 		List<ArticuloInput> requestList = new ArrayList<ArticuloInput>();
 		
@@ -39,8 +35,6 @@ public class AUpdateComerzziaArticulosService extends ConstructorsAbstract {
 		ArticulosInput articulos = ArticulosInput.builder()
 				.articulos(requestList)
 				.build();
-		
-		String token = null;
 		
 		restClientArticulos.execute(articulos, url  + "/list", token);
 		

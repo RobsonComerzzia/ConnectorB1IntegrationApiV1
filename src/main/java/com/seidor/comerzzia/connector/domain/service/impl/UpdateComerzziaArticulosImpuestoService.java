@@ -19,22 +19,17 @@ import jakarta.persistence.Tuple;
 
 @Service
 public class UpdateComerzziaArticulosImpuestoService extends ConstructorsAbstract {
-	
+
 	public UpdateComerzziaArticulosImpuestoService(
-			
 			ItemB1Repository itemB1Repository,
-			
 			RestClientMaster<ArticulosInput> restClientArticulos,
-			
-			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp
-			
-			) {
-		
+			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp) {
 		super(itemB1Repository, restClientArticulos, restClientArticulosImp);
+
 	}
 
 	@Override
-	public void invokeApiComerzzia(String url) {
+	public void invokeApiComerzzia(String url, String token) {
 		
 		List<ArticuloImpuestoInput> requestList = new ArrayList<ArticuloImpuestoInput>();
 		
@@ -45,8 +40,6 @@ public class UpdateComerzziaArticulosImpuestoService extends ConstructorsAbstrac
 		ArticulosImpuestoInput articulos = ArticulosImpuestoInput.builder()
 				.articulos(requestList)
 				.build();
-		
-		String token = null;
 		
 		restClientArticulosImp.execute(articulos, url  + "/taxbystate", token);
 		
