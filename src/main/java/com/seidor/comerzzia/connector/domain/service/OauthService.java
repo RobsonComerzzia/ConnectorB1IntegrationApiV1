@@ -13,6 +13,12 @@ public abstract class OauthService {
 	@Value("${oauth.master.url}")
 	private String urlToken;
 	
+	@Value("${master.grant_type}")
+	private String grantType;
+	
+	@Value("${master.scope}")
+	private String scope;
+	
 	@Value("${master.username}")
 	private String userNameMaster;
 	
@@ -25,6 +31,8 @@ public abstract class OauthService {
 	protected String getToken() {
 		
 		AuthenticationInput ouathInput = AuthenticationInput.builder()
+				.granType(grantType)
+				.scope(scope)
 				.username(userNameMaster)
 				.password(passwordMaster)
 				.build();

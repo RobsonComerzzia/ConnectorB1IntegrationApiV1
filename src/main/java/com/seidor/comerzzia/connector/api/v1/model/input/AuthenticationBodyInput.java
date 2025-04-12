@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class AuthenticationInput implements Serializable {
+public class AuthenticationBodyInput implements Serializable {
 	
 	
 	private static final long serialVersionUID = 13829272902898L;
