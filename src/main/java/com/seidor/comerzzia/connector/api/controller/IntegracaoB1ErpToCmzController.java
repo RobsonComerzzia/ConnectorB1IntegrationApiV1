@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.seidor.comerzzia.connector.api.controller.openapi.IntegracaoB1ErpToCmzControllerOpenApi;
 import com.seidor.comerzzia.connector.api.v1.model.IntegracaoB1Model;
 import com.seidor.comerzzia.connector.core.security.CheckSecurity;
-import com.seidor.comerzzia.connector.domain.service.IntegrationProcessService;
 import com.seidor.comerzzia.connector.domain.service.StartProcessService;
 
 
