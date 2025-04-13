@@ -13,9 +13,9 @@ import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 
 @Service
-public class AUpdateComerzziaArticulosService extends ConstructorsAbstract {
+public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstract {
 
-	public AUpdateComerzziaArticulosService(
+	public ASyncComerzziaArticulosFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			RestClientMaster<ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp) {

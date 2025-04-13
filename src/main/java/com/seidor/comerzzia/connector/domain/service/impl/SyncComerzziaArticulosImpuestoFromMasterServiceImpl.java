@@ -18,9 +18,9 @@ import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import jakarta.persistence.Tuple;
 
 @Service
-public class UpdateComerzziaArticulosImpuestoService extends ConstructorsAbstract {
+public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstract {
 
-	public UpdateComerzziaArticulosImpuestoService(
+	public SyncComerzziaArticulosImpuestoFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			RestClientMaster<ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp) {

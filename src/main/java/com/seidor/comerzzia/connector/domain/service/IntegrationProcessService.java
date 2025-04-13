@@ -111,7 +111,7 @@ public class IntegrationProcessService extends OauthService {
 		Object[] valuesClassConstructor= { itemB1Repository, restClientArticulos, restClientArticulosImp };
 		Class<?>[] typesClassConstructor = { ItemB1Repository.class, RestClientMaster.class, RestClientMaster.class };
 		
-		ReflectionsUtils.executeVoid(UpdateFromMasterToComerzziaService.class
+		ReflectionsUtils.executeVoid(SyncComerzziaFromMasterService.class
 				, typesClassConstructor
 				, valuesClassConstructor
 				, "invokeApiComerzzia"
