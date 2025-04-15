@@ -8,7 +8,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.AuthenticationInput;
 import com.seidor.comerzzia.connector.rest.client.RestClientToken;
 
 @Service
-public abstract class OauthService {
+public class OauthService {
 	
 	@Value("${oauth.master.url}")
 	private String urlToken;
@@ -28,7 +28,7 @@ public abstract class OauthService {
 	@Autowired
 	private RestClientToken<AuthenticationInput> restClientToken;
 	
-	protected String getToken() {
+	public String getToken() {
 		
 		AuthenticationInput ouathInput = AuthenticationInput.builder()
 				.granType(grantType)

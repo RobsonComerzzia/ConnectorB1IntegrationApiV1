@@ -21,7 +21,7 @@ public class ResponseTokenModel implements Serializable {
 	@JsonProperty("scope")
 	private String scope;
 	
-	@JsonProperty("token_tuype")
+	@JsonProperty("token_type")
 	private String token_type;
 	
 	@JsonProperty("expires_in")

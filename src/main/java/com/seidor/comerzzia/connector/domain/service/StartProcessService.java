@@ -15,7 +15,7 @@ public class StartProcessService {
 	@Autowired
 	private IntegrationProcessService integrationProcessService;
 	
-	@Scheduled(cron = "0 30 6 * * ?", zone = "America/Sao_Paulo")
+	@Scheduled(cron = "0 30 06 * * ?", zone = "America/Sao_Paulo")
 	public IntegracaoB1Model startProcess() {
 		
 		IntegracaoB1Model response = IntegracaoB1Model.builder()

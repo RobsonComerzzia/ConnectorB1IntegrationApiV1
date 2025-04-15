@@ -1,4 +1,4 @@
-package com.seidor.comerzzia.connector.abstracts;
+package com.seidor.comerzzia.connector.api.abstracts;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import com.seidor.comerzzia.connector.util.json.ReadJson;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public abstract class ConstructorsAbstractIntegrarB1LoadDataService implements IntegrarB1LoadDataService  {
+public abstract class ConstructorsAbstractIntegrarB1LoadData implements IntegrarB1LoadDataService  {
 	
 	@Value("${b1.token}")
 	public String token; 

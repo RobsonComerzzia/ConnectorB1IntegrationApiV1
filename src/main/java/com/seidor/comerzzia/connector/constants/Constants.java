@@ -19,5 +19,9 @@ public final class Constants {
 	public static String TOKEN = "token";
 	
 	public static String PROTOCOL_HTTP = "http://";
+	
+	public static String LOAD_DATA = "loadData";
+	
+	public static String INVOKE_API_COMERZZIA = "invokeApiComerzzia";
 
 }

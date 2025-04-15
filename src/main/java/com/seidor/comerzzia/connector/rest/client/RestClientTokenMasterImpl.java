@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Base64;
 
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -28,25 +30,25 @@ public class RestClientTokenMasterImpl implements RestClientToken<Authentication
 		ResponseEntity<ResponseTokenModel> result = null;
 		
 		AuthenticationBodyInput body2 = AuthenticationBodyInput.builder()
-				.granType(body.getGranType())
-				.scope(body.getScope())
+				.grant_type(body.getGranType())
+				//.scope(body.getScope())
 				.build();
 		
 		try {
 			result = restClient.post()
 					.uri(new URI(url))
 					.body(body2)
-					.header("Authorization", getBasicAuthenticationHeader(body.getUsername(), body.getPassword()))
+					//.header("Authorization", getBasicAuthenticationHeader(body.getUsername(), body.getPassword()))
+				    .headers(httpHeaders -> {
+				    	httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
+				        httpHeaders.setBasicAuth(body.getUsername(), body.getPassword());
+				    })
 					.retrieve()
 			        .onStatus(httpStatusCode -> httpStatusCode.value() == 302, (req, res) -> {
 			        	String json = new String(res.getBody().readAllBytes());
 			        	log.error("{} - {}", NAME_CLASS, json);
 			         })
-			        .onStatus(httpStatusCode -> httpStatusCode.value() == 422, (req, res) -> {
-			        	String json = new String(res.getBody().readAllBytes());
-			        	log.error("{} - {}", NAME_CLASS, json);
-			         })
-			        .onStatus(httpStatusCode -> httpStatusCode.value() == 404, (req, res) -> {
+			        .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
 			        	String json = new String(res.getBody().readAllBytes());
 			        	log.error("{} - {}", NAME_CLASS, json);
 			         })
@@ -54,10 +56,6 @@ public class RestClientTokenMasterImpl implements RestClientToken<Authentication
 			        	String json = new String(res.getBody().readAllBytes());
 			        	log.error("{} - ERRO url {}: {}", NAME_CLASS, url, json);
 			         })
-			        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
-			        	String json = new String(res.getBody().readAllBytes());
-			        	log.error("{} - ERRO url {}: {}", NAME_CLASS, url, json);
-			         })	
 					.toEntity(ResponseTokenModel.class);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
@@ -69,7 +67,7 @@ public class RestClientTokenMasterImpl implements RestClientToken<Authentication
 	
 	private static final String getBasicAuthenticationHeader(String username, String password) {
 	    String valueToEncode = username + ":" + password;
-	    return "Basic Auth " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
+	    return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
 	}
 	
 

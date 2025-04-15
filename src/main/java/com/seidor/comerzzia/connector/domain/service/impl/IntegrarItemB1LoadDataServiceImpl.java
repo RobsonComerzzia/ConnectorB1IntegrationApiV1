@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.seidor.comerzzia.connector.abstracts.ConstructorsAbstractIntegrarB1LoadDataService;
+import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractIntegrarB1LoadData;
 import com.seidor.comerzzia.connector.api.v1.model.GuidB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.VerifyB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.input.GuidB1ModelInput;
@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class IntegrarItemB1LoadDataServiceImpl extends ConstructorsAbstractIntegrarB1LoadDataService {
+public class IntegrarItemB1LoadDataServiceImpl extends ConstructorsAbstractIntegrarB1LoadData {
 	
 	public IntegrarItemB1LoadDataServiceImpl(
 			@Value("${b1.token}")

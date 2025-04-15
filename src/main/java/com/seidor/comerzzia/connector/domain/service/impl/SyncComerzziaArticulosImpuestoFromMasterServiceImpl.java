@@ -7,24 +7,26 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.seidor.comerzzia.connector.abstracts.ConstructorsAbstract;
+import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
 import com.seidor.comerzzia.connector.api.v1.model.ItemTaxResponseModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
+import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 
 import jakarta.persistence.Tuple;
 
 @Service
-public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstract {
+public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia {
+
 
 	public SyncComerzziaArticulosImpuestoFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
-			RestClientMaster<ArticulosInput> restClientArticulos,
+			ItemPriceB1Repository itemPriceB1Repository, RestClientMaster<ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp) {
-		super(itemB1Repository, restClientArticulos, restClientArticulosImp);
+		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp);
 
 	}
 

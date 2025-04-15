@@ -25,7 +25,10 @@ public class RestClientMasterArticulosImpImpl implements RestClientMaster<Articu
 			restClient.post()
 			.uri(url)
 			.body(body)
-			//.header(Constants.TOKEN, token)
+		    .headers(httpHeaders -> {
+		        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+		        httpHeaders.setBearerAuth(token);
+		    })
 			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()
 	        .onStatus(httpStatusCode -> httpStatusCode.value() == 404, (req, res) -> {
