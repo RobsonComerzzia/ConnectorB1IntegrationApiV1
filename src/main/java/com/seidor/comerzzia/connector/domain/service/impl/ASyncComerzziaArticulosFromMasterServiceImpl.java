@@ -9,21 +9,21 @@ import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzi
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 
 @Service
-public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia {
-
-
+public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ArticuloInput>> {
 
 	public ASyncComerzziaArticulosFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository, RestClientMaster<ArticulosInput> restClientArticulos,
-			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp) {
-		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp);
-		// TODO Auto-generated constructor stub
+			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp,
+			RestClientMaster<List<TarifaDetInput>> restClientTarifa) {
+		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa);
+		
 	}
 
 	@Override
@@ -39,10 +39,11 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 				.articulos(requestList)
 				.build();
 		
-		restClientArticulos.execute(articulos, url  + "/list", token);
+		restClientArticulos.execute(articulos, url  + "/item/list", token);
 		
 	}
 	
+	@Override
 	public List<ArticuloInput> getDataFromMasterB1() {
 
 		return null;

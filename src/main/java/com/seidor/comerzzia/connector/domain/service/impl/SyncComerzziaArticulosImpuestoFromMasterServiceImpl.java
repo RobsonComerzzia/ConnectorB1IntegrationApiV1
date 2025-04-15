@@ -12,6 +12,7 @@ import com.seidor.comerzzia.connector.api.v1.model.ItemTaxResponseModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
@@ -19,15 +20,15 @@ import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import jakarta.persistence.Tuple;
 
 @Service
-public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia {
-
+public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
 
 	public SyncComerzziaArticulosImpuestoFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository, RestClientMaster<ArticulosInput> restClientArticulos,
-			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp) {
-		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp);
-
+			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp,
+			RestClientMaster<List<TarifaDetInput>> restClientTarifa) {
+		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa);
+		
 	}
 
 	@Override
@@ -43,10 +44,11 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 				.articulos(requestList)
 				.build();
 		
-		restClientArticulosImp.execute(articulos, url  + "/taxbystate", token);
+		restClientArticulosImp.execute(articulos, url  + "/item/taxbystate", token);
 		
 	}
 
+	@Override
 	public List<ItemTaxResponseModel> getDataFromMasterB1() {
 
 	    List<Tuple> itemTaxTuples = itemB1Repository.findItemTaxes();

@@ -16,6 +16,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceListInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonPartnerInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonTaxInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
@@ -77,6 +78,9 @@ public abstract class IntegrationProcessServiceBase {
 	@Autowired
 	private RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp;
 	
+	@Autowired
+	private RestClientMaster<List<TarifaDetInput>> restClientTarifa;
+	
 	protected Class<?>[] loadTypesConstructorsB1(){
 		
 		Class<?>[] types = { 
@@ -120,8 +124,9 @@ public abstract class IntegrationProcessServiceBase {
 	
 	protected Class<?>[] loadTypesConstructorsComerzzia(){
 		
-		Class<?>[] typesClassConstructor = { 
+		Class<?>[] typesClassConstructor = {
 				  ItemB1Repository.class
+				, RestClientMaster.class
 				, RestClientMaster.class
 				, RestClientMaster.class
 			};
@@ -135,7 +140,8 @@ public abstract class IntegrationProcessServiceBase {
 		Object[] valuesClassConstructor = { 
 				  itemB1Repository
 				, restClientArticulos
-				, restClientArticulosImp 
+				, restClientArticulosImp
+				, restClientTarifa
 			};
 		
 		return valuesClassConstructor;
