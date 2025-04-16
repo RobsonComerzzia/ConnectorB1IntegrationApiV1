@@ -12,12 +12,12 @@ import com.seidor.comerzzia.connector.api.v1.model.IntegracaoB1Model;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 
 @Service
-public class StartProcessService {
+public class ScheduleProcessService {
 	
 	@Autowired
 	private IntegrationProcessService integrationProcessService;
 	
-	@Scheduled(cron = "0 40 18 * * ?", zone = "America/Sao_Paulo")
+	@Scheduled(cron = "0 30 06 * * ?", zone = "America/Sao_Paulo")
 	@SchedulerLock(name = "TaskScheduler_startProcess", lockAtLeastFor = "PT10M", lockAtMostFor = "PT20M")
 	public IntegracaoB1Model startProcess() {
 		
