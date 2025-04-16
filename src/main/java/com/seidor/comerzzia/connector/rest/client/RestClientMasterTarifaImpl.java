@@ -39,11 +39,11 @@ public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaD
 	         })			
 	        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
-	        	log.error("{} - Erro: {}", NAME_CLASS, json);
+	        	log.error("{} - Erro {}: {}", res.getStatusCode(), NAME_CLASS, json);
 	         })
 	        .onStatus(httpStatusCode -> httpStatusCode.is5xxServerError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
-	        	log.error("{} - ERRO: {}", NAME_CLASS, json);
+	        	log.error("{} - ERRO {}: {}", res.getStatusCode(), NAME_CLASS, json);
 	         })	
 			.toBodilessEntity();			
 		} catch (Exception e) {

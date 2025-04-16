@@ -23,9 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class SyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemPriceResponseModel>> {
+public class CSyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemPriceResponseModel>> {
 
-	public SyncComerzziaTarifasFromMasterServiceImpl(
+	public CSyncComerzziaTarifasFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository, 
 			RestClientMaster<ArticulosInput> restClientArticulos,

@@ -22,9 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
+public class BSyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
 
-	public SyncComerzziaArticulosImpuestoFromMasterServiceImpl(
+	public BSyncComerzziaArticulosImpuestoFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository, RestClientMaster<ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp,
