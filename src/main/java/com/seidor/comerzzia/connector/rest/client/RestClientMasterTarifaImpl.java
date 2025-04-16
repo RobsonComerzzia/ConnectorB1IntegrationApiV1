@@ -37,7 +37,7 @@ public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaD
 	        	//Todo setar tabela temporaria com data de envio
 	        	log.info("{} - Processo de atualização de Tarifa finalizado com sucesso.", NAME_CLASS);
 	         })			
-	        .onStatus(httpStatusCode -> httpStatusCode.value() == 404, (req, res) -> {
+	        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
 	        	log.error("{} - Erro: {}", NAME_CLASS, json);
 	         })

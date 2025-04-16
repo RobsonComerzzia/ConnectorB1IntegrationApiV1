@@ -31,13 +31,17 @@ public class RestClientMasterArticulosImpImpl implements RestClientMaster<Articu
 		    })*/
 			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()
-	        .onStatus(httpStatusCode -> httpStatusCode.value() == 404, (req, res) -> {
+	        .onStatus(httpStatusCode -> httpStatusCode.is2xxSuccessful(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
-	        	log.error("{} - Erro: {}", NAME_CLASS, json);
+	        	log.info("{} - Sucesso {} : {}", res.getStatusCode(), NAME_CLASS, json);
+	         })
+	        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
+	        	String json = new String(res.getBody().readAllBytes());
+	        	log.error("{} - Erro {} : {}", res.getStatusCode(), NAME_CLASS, json);
 	         })
 	        .onStatus(httpStatusCode -> httpStatusCode.is5xxServerError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
-	        	log.error("{} - ERRO: {}", NAME_CLASS, json);
+	        	log.error("{} - ERRO {}: {}", res.getStatusCode(), NAME_CLASS, json);
 	         })	
 			.toBodilessEntity();			
 		} catch (Exception e) {

@@ -9,8 +9,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.seidor.comerzzia.connector.core.io.Base64ProtocolResolver;
 
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
+
 @EnableRetry
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "PT30S")
 @SpringBootApplication
 public class ConnectorB1IntegrationApiV1Application {
 

@@ -18,8 +18,7 @@ public interface ItemPriceB1Repository extends JpaRepository<ItemPriceB1, ItemPr
 
 	public List<ItemPriceB1> findByItemCodeInAndPriceListIn(List<BigInteger> itemCodes, List<BigInteger> pricesList);
 	
-	@Query(value = 
-			" select distinctrow p.item_code, pl.price_list, pl.valid_from, p.cost_price, p.price "
+	@Query(value = "select distinctrow p.item_code, pl.price_list, pl.valid_from, p.cost_price, p.price "
 			+ "from item_price_b1 p "
 			+ "inner join item_price_list_b1 pl "
 			+ "on p.price_list = pl.price_list "
