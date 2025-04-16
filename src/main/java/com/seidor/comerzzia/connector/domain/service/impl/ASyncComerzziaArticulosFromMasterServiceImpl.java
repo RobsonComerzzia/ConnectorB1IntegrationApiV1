@@ -14,6 +14,9 @@ import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ArticuloInput>> {
 
@@ -29,6 +32,8 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 	@Override
 	public void invokeApiComerzzia(String url, String token) {
 		
+		log.info("[SyncComerzziaTarifasFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Clientes com o B1.");
+		
 		List<ArticuloInput> requestList = new ArrayList<ArticuloInput>();
 		
 		List<?> items = this.getDataFromMasterB1();
@@ -39,7 +44,7 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 				.articulos(requestList)
 				.build();
 		
-		restClientArticulos.execute(articulos, url  + "/item/list", token);
+		restClientArticulos.execute(articulos, url  + "item/list", token);
 		
 	}
 	

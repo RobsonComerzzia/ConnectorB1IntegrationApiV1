@@ -18,7 +18,9 @@ import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 
 import jakarta.persistence.Tuple;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
 
@@ -34,6 +36,8 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 	@Override
 	public void invokeApiComerzzia(String url, String token) {
 		
+		log.info("[SyncComerzziaTarifasFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Articulos x Impuesto com o B1.");
+		
 		List<ArticuloImpuestoInput> requestList = new ArrayList<ArticuloImpuestoInput>();
 		
 		List<ItemTaxResponseModel> taxes = this.getDataFromMasterB1();
@@ -44,7 +48,7 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 				.articulos(requestList)
 				.build();
 		
-		restClientArticulosImp.execute(articulos, url  + "/item/taxbystate", token);
+		restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
 		
 	}
 

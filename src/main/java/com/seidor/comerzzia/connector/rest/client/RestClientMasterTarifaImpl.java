@@ -27,12 +27,16 @@ public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaD
 			restClient.post()
 			.uri(url)
 			.body(body)
-		    .headers(httpHeaders -> {
+		    /*.headers(httpHeaders -> {
 		        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		        httpHeaders.setBearerAuth(token);
-		    })
+		    })*/
 			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()
+	        .onStatus(httpStatusCode -> httpStatusCode.value() == 200, (req, res) -> {
+	        	//Todo setar tabela temporaria com data de envio
+	        	log.info("{} - Processo de atualização de Tarifa finalizado com sucesso.", NAME_CLASS);
+	         })			
 	        .onStatus(httpStatusCode -> httpStatusCode.value() == 404, (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
 	        	log.error("{} - Erro: {}", NAME_CLASS, json);

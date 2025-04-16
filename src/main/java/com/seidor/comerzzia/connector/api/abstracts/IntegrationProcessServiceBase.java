@@ -19,6 +19,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.JsonTaxInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
+import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
 import com.seidor.comerzzia.connector.domain.service.OauthService;
 import com.seidor.comerzzia.connector.rest.client.RestClientB1;
@@ -71,6 +72,9 @@ public abstract class IntegrationProcessServiceBase {
 	
 	@Autowired
 	private ItemB1Repository itemB1Repository;
+	
+	@Autowired
+	private ItemPriceB1Repository itemPriceB1Repository;
 	
 	@Autowired
 	private RestClientMaster<ArticulosInput> restClientArticulos;
@@ -126,6 +130,7 @@ public abstract class IntegrationProcessServiceBase {
 		
 		Class<?>[] typesClassConstructor = {
 				  ItemB1Repository.class
+				, ItemPriceB1Repository.class
 				, RestClientMaster.class
 				, RestClientMaster.class
 				, RestClientMaster.class
@@ -139,6 +144,7 @@ public abstract class IntegrationProcessServiceBase {
 		
 		Object[] valuesClassConstructor = { 
 				  itemB1Repository
+				, itemPriceB1Repository
 				, restClientArticulos
 				, restClientArticulosImp
 				, restClientTarifa

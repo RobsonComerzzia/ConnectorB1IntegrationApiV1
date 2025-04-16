@@ -32,12 +32,14 @@ public class ReflectionsUtils {
 	    	Class<?> c = null;
 			try {
 				c = Class.forName(clazz.getName());
-				if (!Modifier.isAbstract(clazz.getModifiers())) {
-					Constructor<?> cons = c.getDeclaredConstructor(constructorsClasstTypes);
-					T obj = (T) cons.newInstance(constructorsClassValues);
-					method = obj.getClass().getDeclaredMethod(methodName, typesParamsMethod);
-					method.setAccessible(true);
-					method.invoke(obj, valuesParamsMethod);					
+				if (c != null) {
+					if (!Modifier.isAbstract(clazz.getModifiers())) {
+						Constructor<?> cons = c.getDeclaredConstructor(constructorsClasstTypes);
+						T obj = (T) cons.newInstance(constructorsClassValues);
+						method = obj.getClass().getDeclaredMethod(methodName, typesParamsMethod);
+						method.setAccessible(true);
+						method.invoke(obj, valuesParamsMethod);				
+					}	
 				}
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException | NoSuchMethodException | ClassNotFoundException | ConstraintViolationException | SecurityException e) {
