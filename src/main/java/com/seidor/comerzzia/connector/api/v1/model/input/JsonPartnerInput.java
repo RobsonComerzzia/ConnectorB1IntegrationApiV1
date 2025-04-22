@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -22,6 +23,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class JsonPartnerInput implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -43,6 +45,9 @@ public class JsonPartnerInput implements Serializable {
 	
 	@JsonProperty("CardName")
 	private String cardName;
+	
+	@JsonProperty("CardFName")
+	private String cardFName;
 	
 	@JsonProperty("CardType")
 	private String cardType;
@@ -73,11 +78,11 @@ public class JsonPartnerInput implements Serializable {
 	@JsonProperty("frozenFrom")
 	private LocalDateTime frozenFrom;
 	
-	@JsonProperty("AliasName")
-	private String aliasName;
+	//@JsonProperty("AliasName")
+	//private String aliasName;
 	
-	@JsonProperty("Free_Text")
-	private String freeText;
+	//@JsonProperty("Free_Text")
+	//private JsonPartnerFreeTextInput freeText;
 
 	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -119,7 +124,7 @@ public class JsonPartnerInput implements Serializable {
 	private String taxId4;
 	
 	@JsonProperty("CreditLine")
-	private BigDecimal creditLine;
+	private String creditLine;
 	
 	@JsonProperty("Balance")
 	private BigDecimal balance;	

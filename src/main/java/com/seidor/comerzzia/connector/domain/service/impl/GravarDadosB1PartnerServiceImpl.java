@@ -65,6 +65,7 @@ public class GravarDadosB1PartnerServiceImpl implements GravarDadosB1Service<Lis
 				itemB1Base.get().setObjType(partner.getObjType());
 				itemB1Base.get().setCardCode(partner.getCardCode());
 				itemB1Base.get().setCardName(partner.getCardName());
+				itemB1Base.get().setCardFName(partner.getCardFName());
 				itemB1Base.get().setCardType(partner.getCardType());
 				itemB1Base.get().setValidFor(partner.getValidFor());
 				itemB1Base.get().setValidTo(partner.getValidTo());

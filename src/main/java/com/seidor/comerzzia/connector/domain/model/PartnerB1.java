@@ -21,9 +21,6 @@ import lombok.EqualsAndHashCode;
 @IdClass(PartnerB1.pk_partnerB1.class)
 public class PartnerB1 {
 	
-	@Column(name = "id", nullable = false)
-	private Long id; 
-	
 	@Column(name = "guid", length = 40, nullable = false)
 	private String guid;
 	
@@ -43,6 +40,9 @@ public class PartnerB1 {
 	
 	@Column(name = "card_name", length = 150, nullable = false)
 	private String cardName;
+	
+	@Column(name = "card_f_name", length = 100, nullable = false)
+	private String cardFName;
 
 	@Column(name = "card_type", length = 1, nullable = false)
 	private String cardType;
@@ -89,7 +89,7 @@ public class PartnerB1 {
 	@Column(name = "street", length = 100, nullable = true)
 	private String street;
 	
-	@Column(name = "block", length = 50, nullable = true)
+	@Column(name = "block", length = 100, nullable = true)
 	private String block;
 	
 	@Column(name = "state", length = 2, nullable = true)
@@ -98,14 +98,14 @@ public class PartnerB1 {
 	@Column(name = "zip_code", length = 20, nullable = true)
 	private String zipCode;
 	
-	@Column(name = "tax_id0", length = 10, nullable = true)
+	@Column(name = "tax_id0", length = 50, nullable = true)
 	private String taxId0;
 	
-	@Column(name = "tax_id4", length = 10, nullable = true)
+	@Column(name = "tax_id4", length = 50, nullable = true)
 	private String taxId4;
 	
 	@Column(name = "credit_line", nullable = false)
-	private BigDecimal creditLine;
+	private String creditLine;
 	
 	@Column(name = "balance", nullable = false)
 	private BigDecimal balance;
@@ -117,7 +117,7 @@ public class PartnerB1 {
     public void prePersist() {
     	
     	if (creditLine == null) {
-    		creditLine = BigDecimal.ZERO;
+    		creditLine = "0";
     	}
     	
     	if (balance == null) {

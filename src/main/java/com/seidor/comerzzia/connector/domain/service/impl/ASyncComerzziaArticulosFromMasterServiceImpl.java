@@ -2,7 +2,9 @@ package com.seidor.comerzzia.connector.domain.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
@@ -28,9 +30,10 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa);
 		
 	}
-
+	
 	@Override
-	public void invokeApiComerzzia(String url, String token) {
+	@Async
+	public CompletableFuture<Void> invokeApiComerzzia(String url, String token) {
 		
 		log.info("[SyncComerzziaTarifasFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Clientes com o B1.");
 		
@@ -46,6 +49,7 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 		
 		restClientArticulos.execute(articulos, url  + "item/list", token);
 		
+		return null;
 	}
 	
 	@Override

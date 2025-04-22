@@ -73,13 +73,13 @@ create table item_price_list_b1 (
 ) engine=InnoDB default charset=utf8;
 
 create table partner_b1 (
-	id bigint not null auto_increment,
 	guid varchar(50) NOT NULL,
 	doc_entry bigint NOT NULL,
 	trans_type varchar(1) NOT NULL,
     obj_type bigint NOT NULL,
     card_code varchar(20) NOT NULL,
     card_name varchar(150) NOT NULL,
+    card_f_name varchar(100) NOT NULL,
     card_type varchar(1) NOT NULL,
     valid_for varchar(1) NOT NULL,
     valid_to datetime ,
@@ -95,15 +95,14 @@ create table partner_b1 (
 	update_date datetime,
     update_date_master datetime,
 	street varchar(100),
-	block varchar(50),
+	block varchar(150),
 	state varchar(2),
 	zip_code varchar(20),
-	tax_id0 varchar(10),
-	tax_id4 varchar(10),
-	credit_line decimal(13,6) NOT NULL,
+	tax_id0 varchar(50),
+	tax_id4 varchar(50),
+	credit_line varchar(50) NOT NULL,
 	balance decimal(13,6) NOT NULL,
 	last_send_date datetime,
-    primary key(id),
     UNIQUE KEY itemb1_uk (doc_entry)
 ) engine=InnoDB default charset=utf8;
 

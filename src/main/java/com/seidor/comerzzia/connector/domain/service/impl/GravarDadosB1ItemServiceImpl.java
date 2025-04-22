@@ -171,16 +171,24 @@ public class GravarDadosB1ItemServiceImpl implements GravarDadosB1Service<ItemsG
 		
 		List<ItemPriceListB1> itemsUpdated = new ArrayList<>();
 		
+		List<BigInteger> priceLists = itemsPriceList.stream().map(itemCode -> itemCode.getPriceList()).toList();
+		
+		List<ItemPriceListB1> itemsPriceListB1Base = itemPriceListB1Repository.findByPriceListIn(priceLists);
+		
 		for (ItemPriceListB1 item : itemsPriceList) {
-			Optional<ItemPriceListB1> itemB1Base = itemPriceListB1Repository.findByPriceList(item.getPriceList());
-			if (itemB1Base.isPresent()) {
-				itemB1Base.get().setGuid(item.getGuid());
-				itemB1Base.get().setListName(item.getListName());
-				itemB1Base.get().setValidFor(item.getValidFor());
-				itemB1Base.get().setValidFrom(item.getValidFrom());
-				itemB1Base.get().setValidTo(item.getValidTo());
-				itemB1Base.get().setUpdateDate(LocalDateTime.now());
-				itemsUpdated.add(itemB1Base.get());
+			
+			Optional<ItemPriceListB1> itemPriceListB1Base = itemsPriceListB1Base.stream()
+					.filter(itemPrice -> itemPrice.getPriceList().equals(item.getPriceList()))
+					.findFirst();
+			
+			if (itemPriceListB1Base.isPresent()) {
+				itemPriceListB1Base.get().setGuid(item.getGuid());
+				itemPriceListB1Base.get().setListName(item.getListName());
+				itemPriceListB1Base.get().setValidFor(item.getValidFor());
+				itemPriceListB1Base.get().setValidFrom(item.getValidFrom());
+				itemPriceListB1Base.get().setValidTo(item.getValidTo());
+				itemPriceListB1Base.get().setUpdateDate(LocalDateTime.now());
+				itemsUpdated.add(itemPriceListB1Base.get());
 			} else {
 				itemsUpdated.add(item);
 			}
