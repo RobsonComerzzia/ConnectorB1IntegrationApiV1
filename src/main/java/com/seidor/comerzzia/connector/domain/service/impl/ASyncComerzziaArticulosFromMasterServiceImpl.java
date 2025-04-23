@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
@@ -32,10 +31,9 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 	}
 	
 	@Override
-	@Async
 	public CompletableFuture<Void> invokeApiComerzzia(String url, String token) {
 		
-		log.info("[SyncComerzziaTarifasFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Clientes com o B1.");
+		log.info("[ASyncComerzziaArticulosFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Produtos com o B1.");
 		
 		List<ArticuloInput> requestList = new ArrayList<ArticuloInput>();
 		

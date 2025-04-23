@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
@@ -38,10 +37,9 @@ public class CSyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbst
 	}
 
 	@Override
-	@Async
 	public CompletableFuture<Void> invokeApiComerzzia(String url, String token) {
 		
-		log.info("[SyncComerzziaTarifasFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Tarifas com o B1.");
+		log.info("[CSyncComerzziaTarifasFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Tarifas com o B1.");
 		
 		List<TarifaDetInput> requestList = new ArrayList<TarifaDetInput>();
 		
