@@ -1,5 +1,7 @@
 package com.seidor.comerzzia.connector.rest.client;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -24,7 +26,7 @@ public class RestClientMasterArticulosImpl implements RestClientMaster<Articulos
 		try {
 			restClient.post()
 			.uri(url)
-			.body(body)
+			.body(body.getArticulos())
 			//.header(Constants.TOKEN, token)
 			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()

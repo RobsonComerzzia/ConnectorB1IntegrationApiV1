@@ -24,12 +24,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Setter
 @Getter
+@Builder
 @Schema(description = "Modelo de input do item(produto)")
 public class ArticuloInput {
 	

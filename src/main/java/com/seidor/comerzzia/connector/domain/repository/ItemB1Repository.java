@@ -25,5 +25,11 @@ public interface ItemB1Repository extends JpaRepository<ItemB1, ItemB1.pk_itemB1
 			+ "on item.ncm_code = tax.ncm_code "
 			+ "where item.update_date > item.last_send_date or item.last_send_date is null", nativeQuery = true)
 	public List<Tuple> findItemTaxes();
+	
+	@Query(value = "select item_code, item_name, code_bars "
+			+ "from item_b1 "
+			+ "where update_date > last_send_date "
+			+ "or last_send_date is null", nativeQuery = true)
+	public List<Tuple> findItems();
 
 }

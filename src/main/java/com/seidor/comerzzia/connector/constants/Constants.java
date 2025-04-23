@@ -23,5 +23,11 @@ public final class Constants {
 	public static String LOAD_DATA = "loadData";
 	
 	public static String INVOKE_API_COMERZZIA = "invokeApiComerzzia";
+	
+	public static String SIM = "S";
+	
+	public static String NAO = "N";
+	
+	public static String UNIDADE = "U";
 
 }
