@@ -14,9 +14,11 @@ import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
+import com.seidor.comerzzia.connector.domain.model.Articulo;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
-import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
+import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
+import com.seidor.comerzzia.connector.rest.client.RestClientMasterVoid;
 
 import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
@@ -27,11 +29,12 @@ public class BSyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constr
 
 	public BSyncComerzziaArticulosImpuestoFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
-			ItemPriceB1Repository itemPriceB1Repository, RestClientMaster<ArticulosInput> restClientArticulos,
-			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp,
-			RestClientMaster<List<TarifaDetInput>> restClientTarifa) {
-		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa);
-		
+			ItemPriceB1Repository itemPriceB1Repository, RestClientMasterVoid<ArticulosInput> restClientArticulos,
+			RestClientMasterVoid<ArticulosImpuestoInput> restClientArticulosImp,
+			RestClientMasterVoid<List<TarifaDetInput>> restClientTarifa,
+			RestClientMasterReturn<List<Articulo>> restClientArticulo) {
+		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
+				restClientArticulo);
 	}
 
 	@Override
@@ -45,11 +48,13 @@ public class BSyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constr
 		
 		requestList.addAll(this.buildBody(taxes));
 		
-		ArticulosImpuestoInput articulos = ArticulosImpuestoInput.builder()
-				.articulos(requestList)
-				.build();
-		
-		restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
+		if (requestList.size() > 0) {	
+			ArticulosImpuestoInput articulos = ArticulosImpuestoInput.builder()
+					.articulos(requestList)
+					.build();
+			
+			restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
+		}
 		
 		return null;
 	}

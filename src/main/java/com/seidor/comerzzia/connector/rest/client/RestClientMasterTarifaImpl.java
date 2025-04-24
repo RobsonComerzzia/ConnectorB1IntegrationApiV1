@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaDetInput>> {
+public class RestClientMasterTarifaImpl implements RestClientMasterVoid<List<TarifaDetInput>> {
 
 	private static String NAME_CLASS = "[RestClientMasterTarifaImpl]";
 	

@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.v1.assembler.JsonPartnerInputDisassembler;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonPartnerInput;
-import com.seidor.comerzzia.connector.domain.model.ItemB1;
 import com.seidor.comerzzia.connector.domain.model.PartnerB1;
 import com.seidor.comerzzia.connector.domain.repository.PartnerB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
-import com.seidor.comerzzia.connector.util.StringUtils;
 import com.seidor.comerzzia.connector.util.Utils;
 
 import jakarta.transaction.Transactional;

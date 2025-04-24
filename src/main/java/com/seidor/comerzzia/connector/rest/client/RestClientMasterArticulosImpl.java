@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterArticulosImpl implements RestClientMaster<ArticulosInput> {
+public class RestClientMasterArticulosImpl implements RestClientMasterVoid<ArticulosInput> {
 
 	private static String NAME_CLASS = "[RestClientMasterArticulosImpl]";
 	

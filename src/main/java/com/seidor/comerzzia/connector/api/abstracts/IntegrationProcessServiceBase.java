@@ -18,12 +18,14 @@ import com.seidor.comerzzia.connector.api.v1.model.input.JsonPartnerInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonTaxInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
+import com.seidor.comerzzia.connector.domain.model.Articulo;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
 import com.seidor.comerzzia.connector.domain.service.OauthService;
 import com.seidor.comerzzia.connector.rest.client.RestClientB1;
-import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
+import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
+import com.seidor.comerzzia.connector.rest.client.RestClientMasterVoid;
 import com.seidor.comerzzia.connector.util.json.ReadJson;
 
 public abstract class IntegrationProcessServiceBase {
@@ -77,13 +79,16 @@ public abstract class IntegrationProcessServiceBase {
 	private ItemPriceB1Repository itemPriceB1Repository;
 	
 	@Autowired
-	private RestClientMaster<ArticulosInput> restClientArticulos;
+	private RestClientMasterVoid<ArticulosInput> restClientArticulos;
 	
 	@Autowired
-	private RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp;
+	private RestClientMasterVoid<ArticulosImpuestoInput> restClientArticulosImp;
 	
 	@Autowired
-	private RestClientMaster<List<TarifaDetInput>> restClientTarifa;
+	private RestClientMasterVoid<List<TarifaDetInput>> restClientTarifa;
+	
+	@Autowired
+	private RestClientMasterReturn<List<Articulo>> restClientArticulo;
 	
 	protected Class<?>[] loadTypesConstructorsB1(){
 		
@@ -131,9 +136,10 @@ public abstract class IntegrationProcessServiceBase {
 		Class<?>[] typesClassConstructor = {
 				  ItemB1Repository.class
 				, ItemPriceB1Repository.class
-				, RestClientMaster.class
-				, RestClientMaster.class
-				, RestClientMaster.class
+				, RestClientMasterVoid.class
+				, RestClientMasterVoid.class
+				, RestClientMasterVoid.class
+				, RestClientMasterReturn.class
 			};
 		
 		return typesClassConstructor;
@@ -148,6 +154,7 @@ public abstract class IntegrationProcessServiceBase {
 				, restClientArticulos
 				, restClientArticulosImp
 				, restClientTarifa
+				, restClientArticulo
 			};
 		
 		return valuesClassConstructor;

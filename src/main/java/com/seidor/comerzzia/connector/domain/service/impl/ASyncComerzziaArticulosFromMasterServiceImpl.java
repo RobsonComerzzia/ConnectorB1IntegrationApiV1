@@ -21,9 +21,11 @@ import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.FamiliaInner
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.ImpTipoInnerInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.SeccionInnerInput;
 import com.seidor.comerzzia.connector.constants.Constants;
+import com.seidor.comerzzia.connector.domain.model.Articulo;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
-import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
+import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
+import com.seidor.comerzzia.connector.rest.client.RestClientMasterVoid;
 
 import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
@@ -31,16 +33,17 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemResponseModel>> {
-
+	
 	public ASyncComerzziaArticulosFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
-			ItemPriceB1Repository itemPriceB1Repository, RestClientMaster<ArticulosInput> restClientArticulos,
-			RestClientMaster<ArticulosImpuestoInput> restClientArticulosImp,
-			RestClientMaster<List<TarifaDetInput>> restClientTarifa) {
-		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa);
-		
+			ItemPriceB1Repository itemPriceB1Repository, RestClientMasterVoid<ArticulosInput> restClientArticulos,
+			RestClientMasterVoid<ArticulosImpuestoInput> restClientArticulosImp,
+			RestClientMasterVoid<List<TarifaDetInput>> restClientTarifa,
+			RestClientMasterReturn<List<Articulo>> restClientArticulo) {
+		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
+				restClientArticulo);
 	}
-	
+
 	@Override
 	public CompletableFuture<Void> invokeApiComerzzia(String url, String token) {
 		
@@ -53,10 +56,11 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 		requestList.addAll(this.buildBody(items));
 		
 		ArticulosInput articulos = ArticulosInput.builder()
-				.articulos(requestList)
-				.build();
-		
-		restClientArticulos.execute(articulos, url  + "item/list", token);
+					.articulos(requestList)
+					.build();
+			
+			
+		restClientArticulos.execute(articulos, url  + "item/list", token);	
 		
 		return null;
 	}
@@ -84,6 +88,7 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 		List<ArticuloInput> requestList = new ArrayList<ArticuloInput>();
 		
 		for (ItemResponseModel item: articulos) {
+			
 			ArticuloInput articulo = ArticuloInput.builder()
 					.codart(item.getItemCode().toString())
 					.desart(item.getItemName())
