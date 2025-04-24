@@ -1,5 +1,6 @@
 package com.seidor.comerzzia.connector.domain.service.impl;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.v1.assembler.JsonPartnerInputDisassembler;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonPartnerInput;
+import com.seidor.comerzzia.connector.domain.model.ItemB1;
 import com.seidor.comerzzia.connector.domain.model.PartnerB1;
 import com.seidor.comerzzia.connector.domain.repository.PartnerB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
+import com.seidor.comerzzia.connector.util.StringUtils;
 import com.seidor.comerzzia.connector.util.Utils;
 
 import jakarta.transaction.Transactional;
@@ -57,38 +60,46 @@ public class GravarDadosB1PartnerServiceImpl implements GravarDadosB1Service<Lis
 		
 		List<PartnerB1> partnersUpdated = new ArrayList<>();
 		
+		List<BigInteger> docEntries = partnersList.stream().map(p -> p.getDocEntry()).toList();
+		
+		List<PartnerB1> partnersBase = partnerB1Repository.findByDocEntryIn(docEntries);
+		
 		for (PartnerB1 partner : partnersList) {
-			Optional<PartnerB1> itemB1Base = partnerB1Repository.findByDocEntry(partner.getDocEntry());
-			if (itemB1Base.isPresent()) {
-				itemB1Base.get().setGuid(partner.getGuid());
-				itemB1Base.get().setTransType(partner.getTransType());
-				itemB1Base.get().setObjType(partner.getObjType());
-				itemB1Base.get().setCardCode(partner.getCardCode());
-				itemB1Base.get().setCardName(partner.getCardName());
-				itemB1Base.get().setCardFName(partner.getCardFName());
-				itemB1Base.get().setCardType(partner.getCardType());
-				itemB1Base.get().setValidFor(partner.getValidFor());
-				itemB1Base.get().setValidTo(partner.getValidTo());
-				itemB1Base.get().setValidFrom(partner.getValidFrom());
-				itemB1Base.get().setFrozenFor(partner.getFrozenFor());
-				itemB1Base.get().setFrozenTo(partner.getFrozenTo());
-				itemB1Base.get().setFrozenFrom(partner.getFrozenFrom());
-				itemB1Base.get().setAliasName(partner.getAliasName());
-				itemB1Base.get().setFreeText(partner.getFreeText());
-				itemB1Base.get().setDateTill(partner.getDateTill());
-				itemB1Base.get().setLangCode(partner.getLangCode());
-				itemB1Base.get().setCreateDate(partner.getCreateDate());
-				itemB1Base.get().setUpdateDate(partner.getUpdateDate());
-				itemB1Base.get().setUpdateDateMaster(LocalDateTime.now());
-				itemB1Base.get().setStreet(partner.getStreet());
-				itemB1Base.get().setBlock(partner.getBlock());
-				itemB1Base.get().setState(partner.getState());
-				itemB1Base.get().setZipCode(partner.getZipCode());
-				itemB1Base.get().setTaxId0(partner.getTaxId0());
-				itemB1Base.get().setTaxId4(partner.getTaxId4());
-				itemB1Base.get().setCreditLine(partner.getCreditLine());
-				itemB1Base.get().setBalance(partner.getBalance());
-				partnersUpdated.add(itemB1Base.get());
+			
+			Optional<PartnerB1> partnerBase = partnersBase.stream()
+					.filter(docEntry -> docEntry.getDocEntry().equals(partner.getDocEntry()))
+					.findFirst();
+			
+			if (partnerBase.isPresent()) {
+				partnerBase.get().setGuid(partner.getGuid());
+				partnerBase.get().setTransType(partner.getTransType());
+				partnerBase.get().setObjType(partner.getObjType());
+				partnerBase.get().setCardCode(partner.getCardCode());
+				partnerBase.get().setCardName(partner.getCardName());
+				partnerBase.get().setCardFName(partner.getCardFName());
+				partnerBase.get().setCardType(partner.getCardType());
+				partnerBase.get().setValidFor(partner.getValidFor());
+				partnerBase.get().setValidTo(partner.getValidTo());
+				partnerBase.get().setValidFrom(partner.getValidFrom());
+				partnerBase.get().setFrozenFor(partner.getFrozenFor());
+				partnerBase.get().setFrozenTo(partner.getFrozenTo());
+				partnerBase.get().setFrozenFrom(partner.getFrozenFrom());
+				partnerBase.get().setAliasName(partner.getAliasName());
+				partnerBase.get().setFreeText(partner.getFreeText());
+				partnerBase.get().setDateTill(partner.getDateTill());
+				partnerBase.get().setLangCode(partner.getLangCode());
+				partnerBase.get().setCreateDate(partner.getCreateDate());
+				partnerBase.get().setUpdateDate(partner.getUpdateDate());
+				partnerBase.get().setUpdateDateMaster(LocalDateTime.now());
+				partnerBase.get().setStreet(partner.getStreet());
+				partnerBase.get().setBlock(partner.getBlock());
+				partnerBase.get().setState(partner.getState());
+				partnerBase.get().setZipCode(partner.getZipCode());
+				partnerBase.get().setTaxId0(partner.getTaxId0());
+				partnerBase.get().setTaxId4(partner.getTaxId4());
+				partnerBase.get().setCreditLine(partner.getCreditLine());
+				partnerBase.get().setBalance(partner.getBalance());
+				partnersUpdated.add(partnerBase.get());
 			} else {
 				partnersUpdated.add(partner);
 			}

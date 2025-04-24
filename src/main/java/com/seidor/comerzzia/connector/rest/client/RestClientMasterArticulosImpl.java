@@ -1,7 +1,5 @@
 package com.seidor.comerzzia.connector.rest.client;
 
-import java.util.List;
-
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -30,17 +28,21 @@ public class RestClientMasterArticulosImpl implements RestClientMaster<Articulos
 			//.header(Constants.TOKEN, token)
 			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()
-	        .onStatus(httpStatusCode -> httpStatusCode.value() == 404, (req, res) -> {
+	        .onStatus(httpStatusCode -> httpStatusCode.value() == 200, (req, res) -> {
+	        	//Todo setar tabela temporaria com data de envio
+	        	log.info("{} - Processo de atualização de Produtos finalizado com sucesso.", NAME_CLASS);
+	         })			
+	        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
-	        	log.error("{} - Erro: {}", NAME_CLASS, json);
+	        	log.error("{} - Erro {}: {}", res.getStatusCode(), NAME_CLASS, json);
 	         })
 	        .onStatus(httpStatusCode -> httpStatusCode.is5xxServerError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
-	        	log.error("{} - ERRO: {}", NAME_CLASS, json);
+	        	log.error("{} - ERRO {}: {}", res.getStatusCode(), NAME_CLASS, json);
 	         })	
-			.toBodilessEntity();			
+			.toBodilessEntity();				
 		} catch (Exception e) {
-			log.error("{} - Falha ao atualizar dados de Clientes no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
+			log.error("{} - Falha ao atualizar dados de Produtos no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
 	}
 
