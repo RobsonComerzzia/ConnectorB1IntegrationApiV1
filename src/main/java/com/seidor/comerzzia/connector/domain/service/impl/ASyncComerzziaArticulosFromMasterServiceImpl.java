@@ -3,7 +3,6 @@ package com.seidor.comerzzia.connector.domain.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 	}
 
 	@Override
-	public CompletableFuture<Void> invokeApiComerzzia(String url, String token) {
+	public void invokeApiComerzzia(String url, String token) {
 		
 		log.info("[ASyncComerzziaArticulosFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Produtos com o B1.");
 		
@@ -61,8 +60,7 @@ public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 			
 			
 		restClientArticulos.execute(articulos, url  + "item/list", token);	
-		
-		return null;
+
 	}
 	
 	@Override

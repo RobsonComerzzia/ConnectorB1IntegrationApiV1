@@ -1,6 +1,5 @@
 package com.seidor.comerzzia.connector.rest.client;
 
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;

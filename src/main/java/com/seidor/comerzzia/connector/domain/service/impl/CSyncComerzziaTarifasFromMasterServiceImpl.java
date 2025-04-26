@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class CSyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbst
 	}
 
 	@Override
-	public CompletableFuture<Void> invokeApiComerzzia(String url, String token) {
+	public void invokeApiComerzzia(String url, String token) {
 		
 		log.info("[CSyncComerzziaTarifasFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Tarifas com o B1.");
 		
@@ -50,8 +49,6 @@ public class CSyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbst
 		requestList.addAll(this.buildBody(prices));
 		
 		restClientTarifa.execute(requestList, url  + "item/prices/list", token);
-		
-		return null;
 		
 	}
 	
