@@ -10,15 +10,18 @@ import com.seidor.comerzzia.connector.api.v1.model.GuidB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.VerifyB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.input.GuidB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ItemsGravarInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.JsonCategoryInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceListInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonPartnerInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonTaxInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.JsonCategoryInnerInput;
 import com.seidor.comerzzia.connector.constants.Constants;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
-import com.seidor.comerzzia.connector.rest.client.RestClientB1;
+import com.seidor.comerzzia.connector.rest.client.RestClientB1Api;
+import com.seidor.comerzzia.connector.rest.client.RestClientB1Json;
 import com.seidor.comerzzia.connector.util.json.ReadJson;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,16 +37,20 @@ public class IntegrarPartnerB1LoadDataServiceImpl extends ConstructorsAbstractIn
 			String apiKey,
 			@Value("${url.base.b1}")
 			String urlBaseB1,
-			RestClientB1<GuidB1ModelInput, GuidB1Model, VerifyB1ModelInput, VerifyB1Model> restClient,
+			RestClientB1Json<GuidB1ModelInput, GuidB1Model, VerifyB1ModelInput, VerifyB1Model> restClient,
+			RestClientB1Api<JsonCategoryInput> restClientApi,
 			ReadJson<List<JsonTaxInput>> readJsonTax, ReadJson<List<JsonItemInput>> readJsonItem,
 			ReadJson<List<JsonItemPriceInput>> readJsonItemPrice,
 			ReadJson<List<JsonItemPriceListInput>> readJsonItemPriceList,
 			ReadJson<List<JsonPartnerInput>> readJsonPartner,
 			GravarDadosB1Service<List<JsonTaxInput>> gravarDadosTaxService,
 			GravarDadosB1Service<ItemsGravarInput> gravarDadosItemService,
-			GravarDadosB1Service<List<JsonPartnerInput>> gravarDadosPartnerService) {
-		super(token, apiKey, urlBaseB1, restClient, readJsonTax, readJsonItem, readJsonItemPrice, readJsonItemPriceList,
-				readJsonPartner, gravarDadosTaxService, gravarDadosItemService, gravarDadosPartnerService);
+			GravarDadosB1Service<List<JsonPartnerInput>> gravarDadosPartnerService,
+			GravarDadosB1Service<List<JsonCategoryInnerInput>> gravarDadosCategoryService) {
+		super(token, apiKey, urlBaseB1, restClient, restClientApi, readJsonTax, readJsonItem, readJsonItemPrice,
+				readJsonItemPriceList, readJsonPartner, gravarDadosTaxService, gravarDadosItemService,
+				gravarDadosPartnerService, gravarDadosCategoryService);
+	
 	}
 
 	@Override

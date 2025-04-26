@@ -6,7 +6,7 @@ import org.springframework.retry.annotation.Retryable;
 import com.seidor.comerzzia.connector.api.v1.model.input.SetReceivedB1Input;
 import com.seidor.comerzzia.connector.exception.FileNameNotFoundException;
 
-public interface RestClientB1<InputGuid, GuidModel, VerifyInput, VerifyModel> {
+public interface RestClientB1Json<InputGuid, GuidModel, VerifyInput, VerifyModel> {
 	
 	public GuidModel getGuid(InputGuid body, String url) throws FileNameNotFoundException;
 	

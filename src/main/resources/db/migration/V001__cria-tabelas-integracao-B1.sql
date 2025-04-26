@@ -106,6 +106,18 @@ create table partner_b1 (
     UNIQUE KEY itemb1_uk (doc_entry)
 ) engine=InnoDB default charset=utf8;
 
+create table category_b1 (
+	id bigint not null auto_increment,
+	code varchar(10) NOT NULL,
+    name varchar(150) NOT NULL,
+    create_date datetime,
+    update_date datetime,
+    update_date_master datetime,
+	last_send_date datetime,
+    primary key(id),
+    UNIQUE KEY categoryb1_uk (code)
+) engine=InnoDB default charset=utf8;
+
 /*Tabela de controle de instancias de execução de Schedule*/
 CREATE TABLE shedlock (
   name VARCHAR(64),

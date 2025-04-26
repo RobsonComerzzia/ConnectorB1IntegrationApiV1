@@ -11,6 +11,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.GuidB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ItemsGravarInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.JsonCategoryInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceListInput;
@@ -18,12 +19,14 @@ import com.seidor.comerzzia.connector.api.v1.model.input.JsonPartnerInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonTaxInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.JsonCategoryInnerInput;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
 import com.seidor.comerzzia.connector.domain.service.OauthService;
-import com.seidor.comerzzia.connector.rest.client.RestClientB1;
+import com.seidor.comerzzia.connector.rest.client.RestClientB1Api;
+import com.seidor.comerzzia.connector.rest.client.RestClientB1Json;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterVoid;
 import com.seidor.comerzzia.connector.util.json.ReadJson;
@@ -55,7 +58,7 @@ public abstract class IntegrationProcessServiceBase {
 	private ReadJson<List<JsonItemPriceInput>> readJsonItemPrice;
 	
 	@Autowired
-	private RestClientB1<GuidB1ModelInput, GuidB1Model, VerifyB1ModelInput, VerifyB1Model> restClientB1;
+	private RestClientB1Json<GuidB1ModelInput, GuidB1Model, VerifyB1ModelInput, VerifyB1Model> restClientB1;
 	
 	@Autowired
 	private ReadJson<List<JsonItemPriceListInput>> readJsonItemPriceList;
@@ -71,6 +74,9 @@ public abstract class IntegrationProcessServiceBase {
 	
 	@Autowired
 	private GravarDadosB1Service<List<JsonPartnerInput>> gravarDadosPartnerService;
+	
+	@Autowired
+	private GravarDadosB1Service<List<JsonCategoryInnerInput>> gravarDadosCategoryService;	
 	
 	@Autowired
 	private ItemB1Repository itemB1Repository;
@@ -89,6 +95,10 @@ public abstract class IntegrationProcessServiceBase {
 	
 	@Autowired
 	private RestClientMasterReturn<List<Articulo>> restClientArticulo;
+
+	@Autowired
+	private RestClientB1Api<JsonCategoryInput> restClientB1Api;
+	
 	
 	protected Class<?>[] loadTypesConstructorsB1(){
 		
@@ -96,12 +106,14 @@ public abstract class IntegrationProcessServiceBase {
 				  String.class
 				, String.class
 				, String.class
-				, RestClientB1.class
+				, RestClientB1Json.class
+				, RestClientB1Api.class
 				, ReadJson.class
 				, ReadJson.class
 				, ReadJson.class
 				, ReadJson.class
 				, ReadJson.class
+				, GravarDadosB1Service.class
 				, GravarDadosB1Service.class
 				, GravarDadosB1Service.class
 				, GravarDadosB1Service.class
@@ -118,6 +130,7 @@ public abstract class IntegrationProcessServiceBase {
 				, apiKey
 				, urlBaseB1
 				, restClientB1
+				, restClientB1Api
 				, readJsonTax
 				, readJsonItem
 				, readJsonItemPrice
@@ -126,6 +139,7 @@ public abstract class IntegrationProcessServiceBase {
 				, gravarDadosTaxService
 				, gravarDadosItemService
 				, gravarDadosPartnerService
+				, gravarDadosCategoryService
 			};
 		
 		return values;
