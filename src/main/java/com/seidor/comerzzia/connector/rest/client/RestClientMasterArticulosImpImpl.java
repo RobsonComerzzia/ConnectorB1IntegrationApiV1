@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterArticulosImpImpl implements RestClientMasterVoid<ArticulosImpuestoInput> {
+public class RestClientMasterArticulosImpImpl implements RestClientMaster<ArticulosImpuestoModel ,ArticulosImpuestoInput> {
 
 	private static String NAME_CLASS = "[RestClientMasterImpl]";
 	
 	@Override
-	public void execute(ArticulosImpuestoInput body, String url, String token) {
+	public void executeVoid(ArticulosImpuestoInput body, String url, String token) {
 		
 		RestClient restClient = RestClient.create();
 		
@@ -47,6 +48,12 @@ public class RestClientMasterArticulosImpImpl implements RestClientMasterVoid<Ar
 		} catch (Exception e) {
 			log.error("{} - Falha ao atualizar dados de Impostos no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
+	}
+
+	@Override
+	public ArticulosImpuestoModel execute(ArticulosImpuestoInput body, String url, String token) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

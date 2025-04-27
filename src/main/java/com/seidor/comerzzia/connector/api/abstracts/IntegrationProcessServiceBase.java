@@ -5,10 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.GuidB1Model;
+import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.VerifyB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
+import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.GuidB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ItemsGravarInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonCategoryInput;
@@ -21,14 +26,15 @@ import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.JsonCategoryInnerInput;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
+import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
 import com.seidor.comerzzia.connector.domain.service.OauthService;
 import com.seidor.comerzzia.connector.rest.client.RestClientB1Api;
 import com.seidor.comerzzia.connector.rest.client.RestClientB1Json;
+import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
-import com.seidor.comerzzia.connector.rest.client.RestClientMasterVoid;
 import com.seidor.comerzzia.connector.util.json.ReadJson;
 
 public abstract class IntegrationProcessServiceBase {
@@ -85,19 +91,25 @@ public abstract class IntegrationProcessServiceBase {
 	private ItemPriceB1Repository itemPriceB1Repository;
 	
 	@Autowired
-	private RestClientMasterVoid<ArticulosInput> restClientArticulos;
+	private CategoryB1Repository categoryB1Repository;
 	
 	@Autowired
-	private RestClientMasterVoid<ArticulosImpuestoInput> restClientArticulosImp;
+	private RestClientMaster<ArticulosModel, ArticulosInput> restClientArticulos;
 	
 	@Autowired
-	private RestClientMasterVoid<List<TarifaDetInput>> restClientTarifa;
+	private RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp;
+	
+	@Autowired
+	private RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa;
 	
 	@Autowired
 	private RestClientMasterReturn<List<Articulo>> restClientArticulo;
 
 	@Autowired
 	private RestClientB1Api<JsonCategoryInput> restClientB1Api;
+	
+	@Autowired
+	private RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategory;
 	
 	
 	protected Class<?>[] loadTypesConstructorsB1(){
@@ -150,10 +162,12 @@ public abstract class IntegrationProcessServiceBase {
 		Class<?>[] typesClassConstructor = {
 				  ItemB1Repository.class
 				, ItemPriceB1Repository.class
-				, RestClientMasterVoid.class
-				, RestClientMasterVoid.class
-				, RestClientMasterVoid.class
+				, CategoryB1Repository.class  
+				, RestClientMaster.class
+				, RestClientMaster.class
+				, RestClientMaster.class
 				, RestClientMasterReturn.class
+				, RestClientMaster.class
 			};
 		
 		return typesClassConstructor;
@@ -165,10 +179,12 @@ public abstract class IntegrationProcessServiceBase {
 		Object[] valuesClassConstructor = { 
 				  itemB1Repository
 				, itemPriceB1Repository
+				, categoryB1Repository
 				, restClientArticulos
 				, restClientArticulosImp
 				, restClientTarifa
 				, restClientArticulo
+				, restClientCategory
 			};
 		
 		return valuesClassConstructor;

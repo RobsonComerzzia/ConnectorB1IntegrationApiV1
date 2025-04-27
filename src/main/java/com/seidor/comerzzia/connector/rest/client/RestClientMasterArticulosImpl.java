@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterArticulosImpl implements RestClientMasterVoid<ArticulosInput> {
+public class RestClientMasterArticulosImpl implements RestClientMaster<ArticulosModel, ArticulosInput> {
 
 	private static String NAME_CLASS = "[RestClientMasterArticulosImpl]";
 	
 	@Override
-	public void execute(ArticulosInput body, String url, String token) {
+	public void executeVoid(ArticulosInput body, String url, String token) {
 		
 		RestClient restClient = RestClient.create();
 		
@@ -44,6 +45,12 @@ public class RestClientMasterArticulosImpl implements RestClientMasterVoid<Artic
 		} catch (Exception e) {
 			log.error("{} - Falha ao atualizar dados de Produtos no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
+	}
+
+	@Override
+	public ArticulosModel execute(ArticulosInput body, String url, String token) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -8,10 +8,15 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
+import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.ItemResponseModel;
+import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
+import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.ArticuloCodbarInnerInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.ArticuloUnidadeMedidaInnerInput;
@@ -21,32 +26,36 @@ import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.ImpTipoInner
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.SeccionInnerInput;
 import com.seidor.comerzzia.connector.constants.Constants;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
+import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
+import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
-import com.seidor.comerzzia.connector.rest.client.RestClientMasterVoid;
 
 import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ASyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemResponseModel>> {
+public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemResponseModel>> {
 	
-	public ASyncComerzziaArticulosFromMasterServiceImpl(
+	public BSyncComerzziaArticulosFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
-			ItemPriceB1Repository itemPriceB1Repository, RestClientMasterVoid<ArticulosInput> restClientArticulos,
-			RestClientMasterVoid<ArticulosImpuestoInput> restClientArticulosImp,
-			RestClientMasterVoid<List<TarifaDetInput>> restClientTarifa,
-			RestClientMasterReturn<List<Articulo>> restClientArticulo) {
-		super(itemB1Repository, itemPriceB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
-				restClientArticulo);
+			ItemPriceB1Repository itemPriceB1Repository, 
+			CategoryB1Repository categoryB1Repository,
+			RestClientMaster<ArticulosModel, ArticulosInput> restClientArticulos,
+			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
+			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
+			RestClientMasterReturn<List<Articulo>> restClientArticulo,
+			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion) {
+		super(itemB1Repository, itemPriceB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
+				restClientArticulo, restClientCategorizacion);
 	}
 
 	@Override
 	public void invokeApiComerzzia(String url, String token) {
 		
-		log.info("[ASyncComerzziaArticulosFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Produtos com o B1.");
+		log.info("[BSyncComerzziaArticulosFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Produtos com o B1.");
 		
 		List<ArticuloInput> requestList = new ArrayList<ArticuloInput>();
 		

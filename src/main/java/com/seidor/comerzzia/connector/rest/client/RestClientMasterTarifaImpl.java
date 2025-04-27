@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 
 import lombok.AllArgsConstructor;
@@ -14,12 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterTarifaImpl implements RestClientMasterVoid<List<TarifaDetInput>> {
+public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaDetModel>,List<TarifaDetInput>> {
 
 	private static String NAME_CLASS = "[RestClientMasterTarifaImpl]";
 	
 	@Override
-	public void execute(List<TarifaDetInput> body, String url, String token) {
+	public void executeVoid(List<TarifaDetInput> body, String url, String token) {
 		
 		RestClient restClient = RestClient.create();
 		
@@ -50,6 +51,12 @@ public class RestClientMasterTarifaImpl implements RestClientMasterVoid<List<Tar
 			log.error("{} - Falha ao atualizar dados de Tarifas no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
 		
+	}
+
+	@Override
+	public List<TarifaDetModel> execute(List<TarifaDetInput> body, String url, String token) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
