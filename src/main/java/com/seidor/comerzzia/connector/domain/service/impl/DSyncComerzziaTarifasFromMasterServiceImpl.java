@@ -57,7 +57,7 @@ public class DSyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbst
 		
 		requestList.addAll(this.buildBody(prices));
 		
-		restClientTarifa.execute(requestList, url  + "item/prices/list", token);
+		restClientTarifa.executeVoid(requestList, url  + "item/prices/list", token);
 		
 	}
 	

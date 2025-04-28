@@ -29,5 +29,7 @@ public final class Constants {
 	public static String NAO = "N";
 	
 	public static String UNIDADE = "U";
+	
+	public static String GENERAL = "GENERAL";
 
 }
