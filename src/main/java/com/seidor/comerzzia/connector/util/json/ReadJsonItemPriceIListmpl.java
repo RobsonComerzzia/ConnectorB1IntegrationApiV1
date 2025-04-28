@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceListInput;
 import com.seidor.comerzzia.connector.constants.Constants;
+import com.seidor.comerzzia.connector.util.StringUtils;
 
 
 @Component
@@ -27,6 +28,7 @@ public class ReadJsonItemPriceIListmpl implements ReadJson<List<JsonItemPriceLis
 		try {
 			String jason = IOUtils.toString(new URL(url), Charset.forName(Constants.UTF8));
 			items = objectMapper.readValue(jason, new TypeReference<List<JsonItemPriceListInput>>(){});
+			items.stream().forEach(item -> item.setPriceList(StringUtils.leftPadZero(Integer.parseInt(item.getPriceList()), 4)));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

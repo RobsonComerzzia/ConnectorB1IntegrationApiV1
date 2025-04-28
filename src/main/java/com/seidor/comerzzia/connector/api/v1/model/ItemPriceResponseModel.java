@@ -15,9 +15,9 @@ public class ItemPriceResponseModel implements Serializable {
 
 	private static final long serialVersionUID = 147393682056L;
 	
-	private Long itemCode;
+	private String itemCode;
 	
-	private Long codTar;
+	private String codTar;
 	
 	private LocalDateTime validFrom;
 	

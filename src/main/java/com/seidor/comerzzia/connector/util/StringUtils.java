@@ -12,5 +12,9 @@ public abstract class StringUtils {
 				.replace("/", "");
 		
 	}
+	
+	public static String leftPadZero(int number, int fill) {
+	    return String.format("%" + fill + "s", number).replace(' ', '0');
+	}
 
 }

@@ -1,6 +1,5 @@
 package com.seidor.comerzzia.connector.domain.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -14,9 +13,9 @@ import jakarta.persistence.Tuple;
 
 public interface ItemPriceB1Repository extends JpaRepository<ItemPriceB1, ItemPriceB1.pk_itemPriceB1> {
 	
-	public Optional<ItemPriceB1> findByItemCodeAndPriceList(BigInteger itemCode, BigInteger priceList);
+	public Optional<ItemPriceB1> findByItemCodeAndPriceList(String itemCode, String priceList);
 
-	public List<ItemPriceB1> findByItemCodeInAndPriceListIn(List<BigInteger> itemCodes, List<BigInteger> pricesList);
+	public List<ItemPriceB1> findByItemCodeInAndPriceListIn(List<String> itemCodes, List<String> pricesList);
 	
 	@Query(value = "select distinctrow p.item_code, pl.price_list, pl.valid_from, p.cost_price, p.price "
 			+ "from item_price_b1 p "

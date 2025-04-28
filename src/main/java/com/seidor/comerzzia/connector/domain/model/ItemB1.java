@@ -41,7 +41,7 @@ public class ItemB1 {
 	@EqualsAndHashCode.Include
 	@Id
 	@Column(name = "item_code", nullable = false)
-	private BigInteger itemCode;	
+	private String itemCode;	
 	
 	@Column(name = "item_name", length = 150, nullable = false)
 	private String itemName;
@@ -111,7 +111,7 @@ public class ItemB1 {
 		@EqualsAndHashCode.Include
 		@Id
 		@Column(name = "item_code", nullable = false)
-		private BigInteger itemCode;
+		private String itemCode;
 		
 		@EqualsAndHashCode.Include
 		@Id

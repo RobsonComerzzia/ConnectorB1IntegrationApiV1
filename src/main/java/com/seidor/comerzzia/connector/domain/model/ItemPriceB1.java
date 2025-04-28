@@ -2,7 +2,6 @@ package com.seidor.comerzzia.connector.domain.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -31,12 +30,12 @@ public class ItemPriceB1 {
 	@EqualsAndHashCode.Include
 	@Id
 	@Column(name = "item_code", nullable = false)
-	private BigInteger itemCode;
+	private String itemCode;
 	
 	@EqualsAndHashCode.Include
 	@Id
 	@Column(name = "price_list", nullable = false)
-	private BigInteger priceList;
+	private String priceList;
 	
 	@Column(name = "price", nullable = false)
 	private BigDecimal price;
@@ -78,12 +77,12 @@ public class ItemPriceB1 {
 		@EqualsAndHashCode.Include
 		@Id
 		@Column(name = "item_code", nullable = false)
-		private BigInteger itemCode;
+		private String itemCode;
 		
 		@EqualsAndHashCode.Include
 		@Id
 		@Column(name = "price_list", nullable = false)
-		private BigInteger priceList;
+		private String priceList;
 	}
 	
 }

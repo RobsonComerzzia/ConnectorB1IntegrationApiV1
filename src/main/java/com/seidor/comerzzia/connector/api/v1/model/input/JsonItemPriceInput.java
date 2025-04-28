@@ -2,7 +2,6 @@ package com.seidor.comerzzia.connector.api.v1.model.input;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,10 +26,10 @@ public class JsonItemPriceInput implements Serializable {
 	private String guid;
 	
 	@JsonProperty("ItemCode")
-	private BigInteger itemCode;
+	private String itemCode;
 	
 	@JsonProperty("PriceList")
-	private BigInteger priceList;
+	private String priceList;
 	
 	@JsonProperty("Price")
 	private BigDecimal price;

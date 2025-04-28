@@ -1,6 +1,5 @@
 package com.seidor.comerzzia.connector.domain.service.impl;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +94,7 @@ public class GravarDadosB1ItemServiceImpl implements GravarDadosB1Service<ItemsG
 		
 		List<ItemB1> itemsUpdated = new ArrayList<ItemB1>();
 		
-		List<BigInteger> itemsCode = items.stream().map(itemCode -> itemCode.getItemCode()).toList();
+		List<String> itemsCode = items.stream().map(itemCode -> itemCode.getItemCode()).toList();
 		
 		List<String> ncmsCodesList = items.stream().map(ncmCode -> StringUtils.tratarString(ncmCode .getNcmCode())).toList();
 		
@@ -140,9 +139,9 @@ public class GravarDadosB1ItemServiceImpl implements GravarDadosB1Service<ItemsG
 		
 		List<ItemPriceB1> itemsUpdated = new ArrayList<>();
 		
-		List<BigInteger> itemsCode = itemsPrice.stream().map(itemCode -> itemCode.getItemCode()).toList();
+		List<String> itemsCode = itemsPrice.stream().map(itemCode -> itemCode.getItemCode()).toList();
 		
-		List<BigInteger> pricesList = itemsPrice.stream().map(priceList -> priceList.getPriceList()).toList();
+		List<String> pricesList = itemsPrice.stream().map(priceList -> priceList.getPriceList()).toList();
 		
 		List<ItemPriceB1> itemsPriceBase = itemPriceB1Repository.findByItemCodeInAndPriceListIn(itemsCode, pricesList);
 		
@@ -171,7 +170,7 @@ public class GravarDadosB1ItemServiceImpl implements GravarDadosB1Service<ItemsG
 		
 		List<ItemPriceListB1> itemsUpdated = new ArrayList<>();
 		
-		List<BigInteger> priceLists = itemsPriceList.stream().map(itemCode -> itemCode.getPriceList()).toList();
+		List<String> priceLists = itemsPriceList.stream().map(itemCode -> itemCode.getPriceList()).toList();
 		
 		List<ItemPriceListB1> itemsPriceListB1Base = itemPriceListB1Repository.findByPriceListIn(priceLists);
 		

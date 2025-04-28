@@ -24,7 +24,7 @@ create table item_b1 (
 	doc_entry bigint NOT NULL,
 	trans_type varchar(1) NOT NULL,
     obj_type bigint NOT NULL,
-    item_code bigint NOT NULL,
+    item_code varchar(50) NOT NULL,
     item_name varchar(200) NOT NULL,
     item_class bigint NOT NULL,
     valid_for varchar(1) NOT NULL,
@@ -47,8 +47,8 @@ create table item_b1 (
 create table item_price_b1 (
 	id bigint not null auto_increment,
 	guid varchar(50) NOT NULL,
-    item_code bigint NOT NULL,
-    price_list bigint NOT NULL,
+    item_code varchar(50) NOT NULL,
+    price_list varchar(10) NOT NULL,
     price decimal(13,6) NOT NULL,
     cost_price decimal(13,6) NOT NULL,
 	uom_code varchar(20) NOT NULL,
@@ -61,7 +61,7 @@ create table item_price_b1 (
 create table item_price_list_b1 (
 	id bigint not null auto_increment,
 	guid varchar(50) NOT NULL,
-    price_list bigint NOT NULL,
+    price_list varchar(10) NOT NULL,
 	list_name varchar(100) NOT NULL,
 	valid_for varchar(1) NOT NULL,
     valid_from datetime,

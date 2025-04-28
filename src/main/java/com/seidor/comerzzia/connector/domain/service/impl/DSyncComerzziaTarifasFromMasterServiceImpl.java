@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
+import com.seidor.comerzzia.connector.domain.model.ItemPriceB1;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
@@ -57,7 +59,9 @@ public class DSyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbst
 		
 		requestList.addAll(this.buildBody(prices));
 		
-		restClientTarifa.executeVoid(requestList, url  + "item/prices/list", token);
+		List<TarifaDetModel> response = restClientTarifa.execute(requestList, url  + "item/prices/list", token);
+		
+		this.setLastSendDate(response);
 		
 	}
 	
@@ -68,8 +72,8 @@ public class DSyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbst
 	    
 	    List<ItemPriceResponseModel> itemPriceModel = itemTaxTuples.stream()
 	            .map(t -> new ItemPriceResponseModel(
-	                    t.get(0, Long.class), 
-	                    t.get(1, Long.class),
+	                    t.get(0, String.class), 
+	                    t.get(1, String.class),
 	                    t.get(2, LocalDateTime.class), 
 	                    t.get(3, BigDecimal.class),
 	                    t.get(4, BigDecimal.class)
@@ -101,6 +105,24 @@ public class DSyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbst
 			requestList.add(price);
 		}
 		return requestList;
+		
+	}
+	
+	private void setLastSendDate(List<TarifaDetModel> response) {
+		
+		if (response.size() > 0) {
+			response.stream().forEach(tar -> {
+				ItemPriceB1.pk_itemPriceB1 pk = new ItemPriceB1.pk_itemPriceB1();
+				pk.setPriceList(tar.getCodtar());
+				pk.setItemCode(tar.getCodart());
+				
+				Optional<ItemPriceB1> price = itemPriceB1Repository.findById(pk);
+				if (price.isPresent()) {
+					price.get().setLastSendDate(LocalDateTime.now());
+					itemPriceB1Repository.save(price.get());
+				}
+			});
+		}
 		
 	}
 	

@@ -1,7 +1,6 @@
 package com.seidor.comerzzia.connector.api.v1.model.input;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -31,7 +30,7 @@ public class JsonItemPriceListInput implements Serializable {
 	private String guid;
 	
 	@JsonProperty("PriceList")
-	private BigInteger priceList;
+	private String priceList;
 
 	@JsonProperty("ListName")
 	private String listName;

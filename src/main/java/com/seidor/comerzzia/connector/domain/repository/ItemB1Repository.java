@@ -1,6 +1,5 @@
 package com.seidor.comerzzia.connector.domain.repository;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +14,9 @@ import jakarta.persistence.Tuple;
 @Repository
 public interface ItemB1Repository extends JpaRepository<ItemB1, ItemB1.pk_itemB1> {
 	
-	public Optional<ItemB1> findByItemCodeAndNcmCode(BigInteger itemCode, String ncmCode);
+	public Optional<ItemB1> findByItemCodeAndNcmCode(String itemCode, String ncmCode);
 	
-	public List<ItemB1> findByItemCodeInAndNcmCodeIn(List<BigInteger> itemsCode, List<String> ncmsCode);
+	public List<ItemB1> findByItemCodeInAndNcmCodeIn(List<String> itemsCode, List<String> ncmsCode);
 	
 	@Query(value = "select tax.state, item.item_code, item.ncm_code, tax.cst_icms, tax.icms "
 			+ "from item_b1 item "

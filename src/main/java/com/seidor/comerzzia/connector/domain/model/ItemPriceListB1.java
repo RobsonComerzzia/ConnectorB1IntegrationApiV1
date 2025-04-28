@@ -1,7 +1,6 @@
 package com.seidor.comerzzia.connector.domain.model;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -28,7 +27,7 @@ public class ItemPriceListB1 {
 	@EqualsAndHashCode.Include
 	@Id
 	@Column(name = "price_list", nullable = false)
-	private BigInteger priceList;
+	private String priceList;
 	
 	@Column(name = "list_name", nullable = false)
 	private String listName;
@@ -57,7 +56,7 @@ public class ItemPriceListB1 {
 		@EqualsAndHashCode.Include
 		@Id
 		@Column(name = "price_list", nullable = false)
-		private BigInteger priceList;
+		private String priceList;
 	}
 	
 }

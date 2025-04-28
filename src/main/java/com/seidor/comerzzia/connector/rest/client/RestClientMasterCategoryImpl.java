@@ -1,6 +1,5 @@
 package com.seidor.comerzzia.connector.rest.client;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -11,7 +10,6 @@ import org.springframework.web.client.RestClient;
 
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
-import com.seidor.comerzzia.connector.domain.model.Articulo;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,8 +25,6 @@ public class RestClientMasterCategoryImpl implements RestClientMaster<List<Categ
 	public void executeVoid(List<CategorizacionInput> body, String url, String token) {
 		
 		RestClient restClient = RestClient.create();
-		
-		ResponseEntity<List<CategorizacionModel>> categorizacionList = null;
 		
 		try {
 			restClient.post()

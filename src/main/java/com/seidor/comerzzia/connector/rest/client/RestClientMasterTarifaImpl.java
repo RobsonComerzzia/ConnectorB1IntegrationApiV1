@@ -2,7 +2,9 @@ package com.seidor.comerzzia.connector.rest.client;
 
 import java.util.List;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -51,8 +53,35 @@ public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaD
 
 	@Override
 	public List<TarifaDetModel> execute(List<TarifaDetInput> body, String url, String token) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		RestClient restClient = RestClient.create();
+		
+		ResponseEntity<List<TarifaDetModel>> tarifaList = null;
+		
+		try {
+			tarifaList = restClient.post()
+				.uri(url)
+				.body(body)
+			    /*.headers(httpHeaders -> {
+			        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+			        httpHeaders.setBearerAuth(token);
+			    })*/
+				.accept(MediaType.APPLICATION_JSON)
+				.retrieve()	
+		        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
+		        	String json = new String(res.getBody().readAllBytes());
+		        	log.error("{} - Erro {}: {}", res.getStatusCode(), NAME_CLASS, json);
+		         })
+		        .onStatus(httpStatusCode -> httpStatusCode.is5xxServerError(), (req, res) -> {
+		        	String json = new String(res.getBody().readAllBytes());
+		        	log.error("{} - ERRO {}: {}", res.getStatusCode(), NAME_CLASS, json);
+		         })	
+		        .toEntity(new ParameterizedTypeReference<List<TarifaDetModel>>() {});			
+		} catch (Exception e) {
+			log.error("{} - Falha ao atualizar dados de Tarifas no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
+		}
+		
+		return tarifaList.getBody();
 	}
 
 }
