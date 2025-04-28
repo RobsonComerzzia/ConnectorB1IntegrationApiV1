@@ -17,6 +17,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemPriceListInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonPartnerInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonTaxInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.SetReceivedB1Input;
 import com.seidor.comerzzia.connector.api.v1.model.input.VerifyB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.JsonCategoryInnerInput;
 import com.seidor.comerzzia.connector.constants.Constants;
@@ -83,12 +84,29 @@ public class IntegrarPartnerB1LoadDataServiceImpl extends ConstructorsAbstractIn
 				
 				partners.stream().forEach(input -> input.setGuid(guidModel.getGuid()));
 				
-				this.gravarDadosPartnerService.gravar(partners);	
+				this.gravarDadosPartnerService.gravar(partners);
+				
+				this.setReceived(guidModel);
 			}
 			
 		}
 		
 		log.info("[IntegrarB1ProcessServiceImpl] - Fim do processamento de Partner");
+		
+	}
+	
+	private void setReceived(GuidB1Model guidModel) {
+		
+		SetReceivedB1Input inputSetReceived = SetReceivedB1Input.builder()
+			.apiKey(apiKey)
+			.guid(guidModel.getGuid())
+			.build();
+
+		try {
+			restClient.setReceived(inputSetReceived, urlBaseB1 + "/partner");
+		} catch (Exception e) {
+			log.error("[IntegrarB1ProcessServiceImpl] - Falha ao realizar o SetReceived para o guid {}. Motivo: {}", inputSetReceived.getGuid(), e.getMessage());
+		}
 		
 	}
 
