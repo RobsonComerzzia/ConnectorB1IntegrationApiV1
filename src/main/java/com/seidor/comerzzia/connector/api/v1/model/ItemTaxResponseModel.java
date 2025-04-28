@@ -16,7 +16,7 @@ public class ItemTaxResponseModel implements Serializable {
 	
 	private String state;
 	
-	private Long itemCode;
+	private String itemCode;
 	
 	private String ncmCode;
 	

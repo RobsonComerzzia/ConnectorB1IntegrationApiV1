@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.checkerframework.framework.qual.Unused;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
-import com.seidor.comerzzia.connector.api.controller.IntegracaoB1ErpToCmzController;
 import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.ItemResponseModel;
@@ -45,8 +43,6 @@ import lombok.extern.slf4j.Slf4j;
 @Order(2)
 @Service
 public class SyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemResponseModel>> {
-
-    private final IntegracaoB1ErpToCmzController integracaoB1ErpToCmzController;
 	
 	public SyncComerzziaArticulosFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
@@ -56,10 +52,9 @@ public class SyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbs
 			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
-			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion, IntegracaoB1ErpToCmzController integracaoB1ErpToCmzController) {
+			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion) {
 		super(itemB1Repository, itemPriceB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
 				restClientArticulo, restClientCategorizacion);
-		this.integracaoB1ErpToCmzController = integracaoB1ErpToCmzController;
 	}
 
 	@Override
@@ -120,8 +115,8 @@ public class SyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbs
 					.desart(item.getItemName())
 					.dtoProveedor(BigDecimal.ZERO)
 					.activo(Constants.SIM)
-					.desglose1("*")
-					.desglose2("*")
+					.desglose1(Constants.NAO)
+					.desglose2(Constants.NAO)
 					.generico(Constants.NAO)
 					.escaparate(Constants.NAO)
 					.balanzaTipoArt(Constants.UNIDADE)

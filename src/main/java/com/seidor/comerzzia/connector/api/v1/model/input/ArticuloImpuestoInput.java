@@ -35,7 +35,7 @@ public class ArticuloImpuestoInput implements Serializable {
 	@Schema(example = "1504")
 	@NotBlank
 	@JsonProperty("itemCode")
-	private Long itemCode;
+	private String itemCode;
 	
 	@Schema(example = "29001001")
 	@NotBlank

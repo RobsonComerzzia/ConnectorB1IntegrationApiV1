@@ -3,6 +3,7 @@ package com.seidor.comerzzia.connector.domain.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractIntegrarB1LoadData;
@@ -28,6 +29,7 @@ import com.seidor.comerzzia.connector.util.json.ReadJson;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Order(1)
 @Service
 public class IntegrarItemB1LoadDataServiceImpl extends ConstructorsAbstractIntegrarB1LoadData {
 	

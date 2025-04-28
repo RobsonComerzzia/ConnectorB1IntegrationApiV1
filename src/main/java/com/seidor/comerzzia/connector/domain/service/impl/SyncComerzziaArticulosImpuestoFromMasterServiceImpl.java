@@ -1,8 +1,10 @@
 package com.seidor.comerzzia.connector.domain.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.core.annotation.Order;
@@ -20,6 +22,9 @@ import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
+import com.seidor.comerzzia.connector.domain.model.CategoryB1;
+import com.seidor.comerzzia.connector.domain.model.ItemB1;
+import com.seidor.comerzzia.connector.domain.model.TaxB1;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
@@ -63,7 +68,14 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 					.articulos(requestList)
 					.build();
 			
-			restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
+			ArticulosImpuestoModel response = restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
+			
+			if (response.getData().size() > 0) {
+				log.info("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - {} taxas sincronizadas com o Comerzzia.", response.getData().size());
+			} else {
+				log.warn("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Nenhuma taxa sincronizada com o Comerzzia!");
+			}	
+			
 		}
 		
 	}
@@ -76,7 +88,7 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 	    List<ItemTaxResponseModel> itemTaxModel = itemTaxTuples.stream()
 	            .map(t -> new ItemTaxResponseModel(
 	                    t.get(0, String.class), 
-	                    t.get(1, Long.class), 
+	                    t.get(1, String.class), 
 	                    t.get(2, String.class),
 	                    t.get(3, String.class),
 	                    t.get(4, BigDecimal.class)
