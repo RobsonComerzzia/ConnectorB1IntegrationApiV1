@@ -5,15 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
+import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.constants.Constants;
@@ -28,14 +29,15 @@ import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Order(1)
 @Service
-public class ASyncComerzziaCategoryFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<CategoryB1>> {
+public class SyncComerzziaCategoryFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<CategoryB1>> {
 	
-	public ASyncComerzziaCategoryFromMasterServiceImpl(
+	public SyncComerzziaCategoryFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository,
 			CategoryB1Repository categoryB1Repository,
-			RestClientMaster<ArticulosModel, ArticulosInput> restClientArticulos,
+			RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
@@ -47,7 +49,7 @@ public class ASyncComerzziaCategoryFromMasterServiceImpl extends ConstructorsAbs
 	@Override
 	public void invokeApiComerzzia(String url, String token) {
 		
-		log.info("[ASyncComerzziaCategoryFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Categorias com o B1.");
+		log.info("[SyncComerzziaCategoryFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Categorias com o B1.");
 		
 		List<CategorizacionInput> requestList = new ArrayList<CategorizacionInput>();
 		
@@ -57,7 +59,12 @@ public class ASyncComerzziaCategoryFromMasterServiceImpl extends ConstructorsAbs
 			
 		List<CategorizacionModel> response = restClientCategorizacion.execute(requestList, url  + "category/list", token);
 		
-		this.setLastSendDate(response);
+		if (response.size() > 0) {
+			this.setLastSendDate(response);
+			log.info("[SyncComerzziaCategoryFromMasterServiceImpl] - {} categorias sincronizadas com o Comerzzia.", response.size());
+		} else {
+			log.warn("[SyncComerzziaCategoryFromMasterServiceImpl] - Nenhum categoria sincronizada com o Comerzzia!");
+		}
 
 	}
 	

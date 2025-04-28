@@ -33,5 +33,7 @@ public interface ItemB1Repository extends JpaRepository<ItemB1, ItemB1.pk_itemB1
 			+ "where it.update_date > it.last_send_date "
 			+ "or it.last_send_date is null", nativeQuery = true)
 	public List<Tuple> findItems();
+	
+	public Optional<ItemB1> findByItemCode(String itemCode);
 
 }

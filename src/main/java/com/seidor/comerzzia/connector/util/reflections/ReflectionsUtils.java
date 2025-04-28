@@ -4,9 +4,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.reflections.Reflections;
+import org.springframework.core.annotation.Order;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +30,14 @@ public class ReflectionsUtils {
 		Reflections reflections = new Reflections(interfaceObj);    
 		Set<Class<? extends T>> clazzes = reflections.getSubTypesOf((Class<T>) interfaceObj);
 		
+		List<Class<? extends T>> clazzesSorted = clazzes.stream()
+			.filter(m -> m.getAnnotation(Order.class)!= null)
+			.sorted(Comparator.comparingInt(m -> m.getAnnotation(Order.class).value()))
+			.collect(Collectors.toList());
+		
 		Method method;
 		
-	    for (Class<? extends T> clazz : clazzes) {
+	    for (Class<? extends T> clazz : clazzesSorted) {
 	    	Class<?> c = null;
 			try {
 				c = Class.forName(clazz.getName());

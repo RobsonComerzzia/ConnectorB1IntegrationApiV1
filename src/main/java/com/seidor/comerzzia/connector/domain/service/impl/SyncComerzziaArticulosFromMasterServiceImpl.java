@@ -1,13 +1,19 @@
 package com.seidor.comerzzia.connector.domain.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.checkerframework.framework.qual.Unused;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
+import com.seidor.comerzzia.connector.api.controller.IntegracaoB1ErpToCmzController;
+import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.ItemResponseModel;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
@@ -15,7 +21,6 @@ import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.ArticuloCodbarInnerInput;
@@ -26,6 +31,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.ImpTipoInner
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.SeccionInnerInput;
 import com.seidor.comerzzia.connector.constants.Constants;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
+import com.seidor.comerzzia.connector.domain.model.ItemB1;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
@@ -36,26 +42,30 @@ import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Order(2)
 @Service
-public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemResponseModel>> {
+public class SyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemResponseModel>> {
+
+    private final IntegracaoB1ErpToCmzController integracaoB1ErpToCmzController;
 	
-	public BSyncComerzziaArticulosFromMasterServiceImpl(
+	public SyncComerzziaArticulosFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository, 
 			CategoryB1Repository categoryB1Repository,
-			RestClientMaster<ArticulosModel, ArticulosInput> restClientArticulos,
+			RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
-			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion) {
+			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion, IntegracaoB1ErpToCmzController integracaoB1ErpToCmzController) {
 		super(itemB1Repository, itemPriceB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
 				restClientArticulo, restClientCategorizacion);
+		this.integracaoB1ErpToCmzController = integracaoB1ErpToCmzController;
 	}
 
 	@Override
 	public void invokeApiComerzzia(String url, String token) {
 		
-		log.info("[BSyncComerzziaArticulosFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Produtos com o B1.");
+		log.info("[SyncComerzziaArticulosFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Produtos com o B1.");
 		
 		List<ArticuloInput> requestList = new ArrayList<ArticuloInput>();
 		
@@ -67,7 +77,14 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 					.articulos(requestList)
 					.build();
 			
-		restClientArticulos.execute(articulos, url  + "item/list", token);	
+		List<ArticuloModel> response  = restClientArticulos.execute(articulos, url  + "item/list", token);
+		
+		if (response.size() > 0) {
+			this.setLastSendDate(response);
+			log.info("[SyncComerzziaArticulosFromMasterServiceImpl] - {} produtos sincronizados com o Comerzzia.", response.size());
+		} else {
+			log.warn("[SyncComerzziaArticulosFromMasterServiceImpl] - Nenhum produto sincronizado com o Comerzzia!");
+		}		
 
 	}
 	
@@ -108,7 +125,7 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 					.generico(Constants.NAO)
 					.escaparate(Constants.NAO)
 					.balanzaTipoArt(Constants.UNIDADE)
-					.familia(this.toFillFamily(item))
+					.familia(null)
 					.seccion(this.toFillSeccion(item))
 					.categorizacion(this.toFillCategorizacion(item))
 					.impTipo(this.toFillTaxType(item))
@@ -122,6 +139,7 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 		
 	}
 	
+	@SuppressWarnings("unused")
 	private FamiliaInnerInput toFillFamily(ItemResponseModel item) {
 		
 		FamiliaInnerInput familia = FamiliaInnerInput.builder()
@@ -136,8 +154,8 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 	private SeccionInnerInput toFillSeccion(ItemResponseModel item) {
 		
 		SeccionInnerInput seccion = SeccionInnerInput.builder()
-				.codseccion("")
-				.desseccion("")
+				.codseccion(item.getCodCat())
+				.desseccion(item.getCatName())
 				.rutaPreparacion("")
 				.activo(Constants.SIM)
 				.build();
@@ -159,7 +177,7 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 	private ImpTipoInnerInput toFillTaxType(ItemResponseModel item) {
 		
 		ImpTipoInnerInput taxType = ImpTipoInnerInput.builder()
-				.codimp("90")
+				.codimp("06")
 				.build();
 		
 		return taxType;
@@ -194,6 +212,20 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 		codesBars.add(codeBars);
 				
 		return codesBars;
+	}
+	
+	private void setLastSendDate(List<ArticuloModel> response) {
+		
+		if (response.size() > 0) {
+			response.stream().forEach(art -> {
+				Optional<ItemB1> item = itemB1Repository.findByItemCode(art.getCodart());
+				if (item.isPresent()) {
+					item.get().setLastSendDate(LocalDateTime.now());
+					itemB1Repository.save(item.get());
+				}
+			});
+		}
+		
 	}
 
 }

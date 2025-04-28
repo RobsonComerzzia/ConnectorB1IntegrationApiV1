@@ -2,12 +2,12 @@ package com.seidor.comerzzia.connector.api.abstracts;
 
 import java.util.List;
 
+import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
@@ -29,7 +29,7 @@ public abstract class ConstructorsAbstractComerzzia<T> implements SyncComerzziaF
 	
 	public CategoryB1Repository categoryB1Repository; 
 	
-	public RestClientMaster<ArticulosModel, ArticulosInput> restClientArticulos;
+	public RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos;
 	
 	public RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp;
 	

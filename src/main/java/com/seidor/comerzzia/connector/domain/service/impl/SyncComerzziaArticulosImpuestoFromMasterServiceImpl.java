@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzia;
+import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.ItemTaxResponseModel;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
@@ -15,7 +17,6 @@ import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
@@ -29,14 +30,15 @@ import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Order(3)
 @Service
-public class CSyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
+public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
 
-	public CSyncComerzziaArticulosImpuestoFromMasterServiceImpl(
+	public SyncComerzziaArticulosImpuestoFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository, 
 			CategoryB1Repository categoryB1Repository,
-			RestClientMaster<ArticulosModel, ArticulosInput> restClientArticulos,
+			RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
@@ -48,7 +50,7 @@ public class CSyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constr
 	@Override
 	public void invokeApiComerzzia(String url, String token) {
 		
-		log.info("[CSyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Articulos x Impuesto com o B1.");
+		log.info("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Articulos x Impuesto com o B1.");
 		
 		List<ArticuloImpuestoInput> requestList = new ArrayList<ArticuloImpuestoInput>();
 		

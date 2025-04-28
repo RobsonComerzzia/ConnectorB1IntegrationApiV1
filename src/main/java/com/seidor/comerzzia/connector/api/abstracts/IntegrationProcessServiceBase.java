@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.GuidB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
@@ -12,7 +13,6 @@ import com.seidor.comerzzia.connector.api.v1.model.VerifyB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.GuidB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ItemsGravarInput;
@@ -94,7 +94,7 @@ public abstract class IntegrationProcessServiceBase {
 	private CategoryB1Repository categoryB1Repository;
 	
 	@Autowired
-	private RestClientMaster<ArticulosModel, ArticulosInput> restClientArticulos;
+	private RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos;
 	
 	@Autowired
 	private RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp;
