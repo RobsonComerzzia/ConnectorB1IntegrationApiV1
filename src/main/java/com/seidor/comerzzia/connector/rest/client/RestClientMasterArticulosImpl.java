@@ -64,11 +64,7 @@ public class RestClientMasterArticulosImpl implements RestClientMaster<List<Arti
 					.body(body.getArticulos())
 					//.header(Constants.TOKEN, token)
 					.accept(MediaType.APPLICATION_JSON)
-					.retrieve()
-			        .onStatus(httpStatusCode -> httpStatusCode.value() == 200, (req, res) -> {
-			        	//Todo setar tabela temporaria com data de envio
-			        	log.info("{} - Processo de atualização de Produtos finalizado com sucesso.", NAME_CLASS);
-			         })			
+					.retrieve()		
 			        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
 			        	String json = new String(res.getBody().readAllBytes());
 			        	log.error("{} - Erro {}: {}", res.getStatusCode(), NAME_CLASS, json);

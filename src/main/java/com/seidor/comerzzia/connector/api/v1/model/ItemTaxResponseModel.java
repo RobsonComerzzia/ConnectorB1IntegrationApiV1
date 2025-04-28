@@ -23,5 +23,7 @@ public class ItemTaxResponseModel implements Serializable {
 	private String cstIcms;
 	
 	private BigDecimal icms;
+	
+	private String category;
 
 }
