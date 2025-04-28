@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonItemInput;
 import com.seidor.comerzzia.connector.constants.Constants;
+import com.seidor.comerzzia.connector.util.StringUtils;
 
 @Component
 public class ReadJsonItemImpl implements ReadJson<List<JsonItemInput>> {
@@ -26,6 +27,10 @@ public class ReadJsonItemImpl implements ReadJson<List<JsonItemInput>> {
 		try {
 			String jason = IOUtils.toString(new URL(url), Charset.forName(Constants.UTF8));
 			items = objectMapper.readValue(jason, new TypeReference<List<JsonItemInput>>(){});
+			items.stream().forEach(item -> {
+				if (item.getU_cmzb1_categ() != null)
+					item.setU_cmzb1_categ(StringUtils.leftPadZero(Integer.parseInt(item.getU_cmzb1_categ()), 4));
+			});
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

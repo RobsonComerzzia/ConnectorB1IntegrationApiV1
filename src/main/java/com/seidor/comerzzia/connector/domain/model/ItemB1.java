@@ -1,6 +1,7 @@
 package com.seidor.comerzzia.connector.domain.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 
@@ -83,6 +84,24 @@ public class ItemB1 {
 	
 	@Column(name = "suom_entry", length = 100, nullable = true)
 	private String sUoMEntry;
+	
+	@Column(name = "u_cmzb1_categ", length = 10, nullable = true)
+	private String u_cmzb1_categ;
+	
+	@Column(name = "sal_unit_msr", length = 10, nullable = true)
+	private String salUnitMsr;
+	
+	@Column(name = "num_in_sale", nullable = true)
+	private BigDecimal NumInSale;
+	
+	@Column(name = "sal_pack_msr", length = 10, nullable = true)
+	private String salPackMsr;
+	
+	@Column(name = "sal_pack_unit", nullable = true)
+	private BigDecimal salPackUnit;
+	
+	@Column(name = "u_cmzb1_venda_unit", length = 1, nullable = true)
+	private String u_cmzB1_venda_unit;	
 	
 	@Column(name = "update_date", nullable = true)
 	private LocalDateTime updateDate;

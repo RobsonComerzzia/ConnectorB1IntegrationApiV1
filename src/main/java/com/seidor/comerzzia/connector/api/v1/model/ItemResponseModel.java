@@ -18,5 +18,11 @@ public class ItemResponseModel implements Serializable {
 	private String itemName;
 	
 	private String codeBars;
+	
+	private String codCat;
+	
+	private String catName;
+	
+	private String unit;
 
 }

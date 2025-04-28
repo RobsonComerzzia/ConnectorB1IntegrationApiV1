@@ -25,10 +25,13 @@ public interface ItemB1Repository extends JpaRepository<ItemB1, ItemB1.pk_itemB1
 			+ "where item.update_date > item.last_send_date or item.last_send_date is null", nativeQuery = true)
 	public List<Tuple> findItemTaxes();
 	
-	@Query(value = "select item_code, item_name, code_bars "
-			+ "from item_b1 "
-			+ "where update_date > last_send_date "
-			+ "or last_send_date is null", nativeQuery = true)
+	@Query(value = "select it.item_code, it.item_name, it.code_bars, cat.code as category, cat.name,"
+			+ "IF(it.u_cmzb1_venda_unit = 'Y', it.sal_pack_msr, it.sal_unit_msr) as unit "
+			+ "from item_b1 it "
+			+ "inner join category_b1 cat "
+			+ "on it.u_cmzb1_categ = cat.code "
+			+ "where it.update_date > it.last_send_date "
+			+ "or it.last_send_date is null", nativeQuery = true)
 	public List<Tuple> findItems();
 
 }

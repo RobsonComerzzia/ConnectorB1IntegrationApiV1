@@ -80,7 +80,10 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 	            .map(t -> new ItemResponseModel(
 	                    t.get(0, String.class), 
 	                    t.get(1, String.class), 
-	                    t.get(2, String.class)
+	                    t.get(2, String.class),
+	                    t.get(3, String.class),
+	                    t.get(4, String.class),
+	                    t.get(5, String.class)
 	                    ))
 	            .collect(Collectors.toList());
 	    
@@ -145,8 +148,8 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 	private CategorizacionInnerInput toFillCategorizacion(ItemResponseModel item) {
 		
 		CategorizacionInnerInput categorizacion = CategorizacionInnerInput.builder()
-				.codcat("")
-				.descat("")
+				.codcat(item.getCodCat())
+				.descat(item.getCatName())
 				.codcatPadre("")
 				.build();
 		
@@ -167,7 +170,7 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 		List<ArticuloUnidadeMedidaInnerInput> unitsMeansure = new ArrayList<>();
 		
 		ArticuloUnidadeMedidaInnerInput unitMeansure = ArticuloUnidadeMedidaInnerInput.builder()
-				.unidadMedida(Constants.UNIDADE)
+				.unidadMedida(item.getUnit())
 				.factorConversion(BigDecimal.ONE)
 				.build();
 		

@@ -94,4 +94,19 @@ public class JsonItemInput implements Serializable {
 	@JsonProperty("U_CMZB1_CATEG")
 	private String u_cmzb1_categ;
 	
+	@JsonProperty("SalUnitMsr")
+	private String salUnitMsr;
+	
+	@JsonProperty("NumInSale")
+	private String numInSale;
+	
+	@JsonProperty("SalPackMsr")
+	private String salPackMsr;
+	
+	@JsonProperty("SalPackUn")
+	private String salPackUn;
+	
+	@JsonProperty("U_CMZB1_VendaUnit")
+	private String u_cmzb1_venda_unit;
+	
 }

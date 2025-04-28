@@ -123,6 +123,12 @@ public class GravarDadosB1ItemServiceImpl implements GravarDadosB1Service<ItemsG
 				itemB1Base.get().setCreateDate(item.getCreateDate());
 				itemB1Base.get().setCodeBars(item.getCodeBars());
 				itemB1Base.get().setSUoMEntry(item.getSUoMEntry());
+				itemB1Base.get().setU_cmzb1_categ(item.getU_cmzb1_categ());
+				itemB1Base.get().setSalUnitMsr(item.getSalUnitMsr());
+				itemB1Base.get().setNumInSale(item.getNumInSale());
+				itemB1Base.get().setSalPackMsr(item.getSalPackMsr());
+				itemB1Base.get().setSalPackUnit(item.getSalPackUnit());
+				itemB1Base.get().setU_cmzB1_venda_unit(item.getU_cmzB1_venda_unit());
 				itemB1Base.get().setUpdateDate(LocalDateTime.now());
 				itemsUpdated.add(itemB1Base.get());
 			} else {

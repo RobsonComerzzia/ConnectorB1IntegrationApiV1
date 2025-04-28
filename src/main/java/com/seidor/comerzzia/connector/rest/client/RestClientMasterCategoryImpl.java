@@ -46,7 +46,7 @@ public class RestClientMasterCategoryImpl implements RestClientMaster<List<Categ
 	         })	
 			.toBodilessEntity();			
 		} catch (Exception e) {
-			log.error("{} - Falha ao atualizar dados de Tarifas no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
+			log.error("{} - Falha ao atualizar dados de Categorias no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
 		
 	}
