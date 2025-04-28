@@ -67,7 +67,6 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 					.articulos(requestList)
 					.build();
 			
-			
 		restClientArticulos.execute(articulos, url  + "item/list", token);	
 
 	}
@@ -79,7 +78,7 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 	    
 	    List<ItemResponseModel> itemModel = itemTuples.stream()
 	            .map(t -> new ItemResponseModel(
-	                    t.get(0, Long.class), 
+	                    t.get(0, String.class), 
 	                    t.get(1, String.class), 
 	                    t.get(2, String.class)
 	                    ))
@@ -97,7 +96,7 @@ public class BSyncComerzziaArticulosFromMasterServiceImpl extends ConstructorsAb
 		for (ItemResponseModel item: articulos) {
 			
 			ArticuloInput articulo = ArticuloInput.builder()
-					.codart(item.getItemCode().toString())
+					.codart(item.getItemCode())
 					.desart(item.getItemName())
 					.dtoProveedor(BigDecimal.ZERO)
 					.activo(Constants.SIM)

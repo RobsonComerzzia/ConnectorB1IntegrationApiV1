@@ -13,7 +13,7 @@ public class ItemResponseModel implements Serializable {
 
 	private static final long serialVersionUID = 36282062830183L;
 	
-	private Long itemCode;
+	private String itemCode;
 	
 	private String itemName;
 	
