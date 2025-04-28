@@ -14,6 +14,7 @@ import com.seidor.comerzzia.connector.domain.model.Articulo;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
+import com.seidor.comerzzia.connector.domain.repository.ItemPriceListB1Repository;
 import com.seidor.comerzzia.connector.domain.service.SyncComerzziaFromMasterService;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
@@ -26,6 +27,8 @@ public abstract class ConstructorsAbstractComerzzia<T> implements SyncComerzziaF
 	public ItemB1Repository itemB1Repository;
 	
 	public ItemPriceB1Repository itemPriceB1Repository;
+	
+	public ItemPriceListB1Repository itemPriceListB1Repository;
 	
 	public CategoryB1Repository categoryB1Repository; 
 	

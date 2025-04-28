@@ -23,6 +23,7 @@ import com.seidor.comerzzia.connector.domain.model.CategoryB1;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
+import com.seidor.comerzzia.connector.domain.repository.ItemPriceListB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
 
@@ -36,13 +37,14 @@ public class SyncComerzziaCategoryFromMasterServiceImpl extends ConstructorsAbst
 	public SyncComerzziaCategoryFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository,
+			ItemPriceListB1Repository itemPriceListB1Repository,
 			CategoryB1Repository categoryB1Repository,
 			RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
 			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion) {
-		super(itemB1Repository, itemPriceB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
+		super(itemB1Repository, itemPriceB1Repository, itemPriceListB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
 				restClientArticulo, restClientCategorizacion);
 	}
 

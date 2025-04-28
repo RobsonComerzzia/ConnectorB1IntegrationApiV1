@@ -29,6 +29,7 @@ import com.seidor.comerzzia.connector.domain.model.Articulo;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
+import com.seidor.comerzzia.connector.domain.repository.ItemPriceListB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
 import com.seidor.comerzzia.connector.domain.service.OauthService;
 import com.seidor.comerzzia.connector.rest.client.RestClientB1Api;
@@ -89,6 +90,9 @@ public abstract class IntegrationProcessServiceBase {
 	
 	@Autowired
 	private ItemPriceB1Repository itemPriceB1Repository;
+	
+	@Autowired
+	private ItemPriceListB1Repository itemPriceListB1Repository;
 	
 	@Autowired
 	private CategoryB1Repository categoryB1Repository;
@@ -162,6 +166,7 @@ public abstract class IntegrationProcessServiceBase {
 		Class<?>[] typesClassConstructor = {
 				  ItemB1Repository.class
 				, ItemPriceB1Repository.class
+				, ItemPriceListB1Repository.class
 				, CategoryB1Repository.class  
 				, RestClientMaster.class
 				, RestClientMaster.class
@@ -179,6 +184,7 @@ public abstract class IntegrationProcessServiceBase {
 		Object[] valuesClassConstructor = { 
 				  itemB1Repository
 				, itemPriceB1Repository
+				, itemPriceListB1Repository
 				, categoryB1Repository
 				, restClientArticulos
 				, restClientArticulosImp

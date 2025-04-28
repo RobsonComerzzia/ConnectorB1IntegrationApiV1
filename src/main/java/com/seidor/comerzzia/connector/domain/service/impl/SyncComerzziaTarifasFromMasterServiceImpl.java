@@ -23,9 +23,11 @@ import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
 import com.seidor.comerzzia.connector.domain.model.ItemPriceB1;
+import com.seidor.comerzzia.connector.domain.model.ItemPriceListB1;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
+import com.seidor.comerzzia.connector.domain.repository.ItemPriceListB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
 
@@ -39,14 +41,15 @@ public class SyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbstr
 
 	public SyncComerzziaTarifasFromMasterServiceImpl(
 			ItemB1Repository itemB1Repository,
-			ItemPriceB1Repository itemPriceB1Repository, 
+			ItemPriceB1Repository itemPriceB1Repository,
+			ItemPriceListB1Repository itemPriceListB1Repository,
 			CategoryB1Repository categoryB1Repository,
 			RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos,
 			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
 			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion) {
-		super(itemB1Repository, itemPriceB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
+		super(itemB1Repository, itemPriceB1Repository, itemPriceListB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
 				restClientArticulo, restClientCategorizacion);
 	}
 
@@ -127,6 +130,15 @@ public class SyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbstr
 				if (price.isPresent()) {
 					price.get().setLastSendDate(LocalDateTime.now());
 					itemPriceB1Repository.save(price.get());
+				}
+				
+				ItemPriceListB1.pk_itemPriceListB1 pk2 = new ItemPriceListB1.pk_itemPriceListB1();
+				pk2.setPriceList(price.get().getPriceList());
+				
+				Optional<ItemPriceListB1> pricelist = itemPriceListB1Repository.findById(pk2);
+				if (pricelist.isPresent()) {
+					pricelist.get().setLastSendDate(LocalDateTime.now());
+					itemPriceListB1Repository.save(pricelist.get());
 				}
 			});
 		}
