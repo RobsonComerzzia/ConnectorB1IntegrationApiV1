@@ -201,7 +201,7 @@ public abstract class IntegrationProcessServiceBase {
 		
 		Object[] valuesParamMethod = { 
 				  this.urlMasterItem
-				, null//oauthService.getToken()
+				, oauthService.getToken()
 			};
 		
 		return valuesParamMethod;

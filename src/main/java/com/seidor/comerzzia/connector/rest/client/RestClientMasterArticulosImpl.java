@@ -54,7 +54,9 @@ public class RestClientMasterArticulosImpl implements RestClientMaster<List<Arti
 	@Override
 	public List<ArticuloModel> execute(ArticulosInput body, String url, String token) {
 		
-		RestClient restClient = RestClient.create();
+		RestClient restClient = RestClient.builder()
+                .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .build();
 		
 		ResponseEntity<List<ArticuloModel>> artoculoList = null;
 		
@@ -62,7 +64,6 @@ public class RestClientMasterArticulosImpl implements RestClientMaster<List<Arti
 			artoculoList = restClient.post()
 					.uri(url)
 					.body(body.getArticulos())
-					//.header(Constants.TOKEN, token)
 					.accept(MediaType.APPLICATION_JSON)
 					.retrieve()		
 			        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {

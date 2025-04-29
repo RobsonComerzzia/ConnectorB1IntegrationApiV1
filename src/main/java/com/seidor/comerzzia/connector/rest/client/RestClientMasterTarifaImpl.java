@@ -30,10 +30,10 @@ public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaD
 			restClient.post()
 			.uri(url)
 			.body(body)
-		    /*.headers(httpHeaders -> {
+		    .headers(httpHeaders -> {
 		        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		        httpHeaders.setBearerAuth(token);
-		    })*/
+		    })
 			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()	
 	        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
@@ -54,7 +54,9 @@ public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaD
 	@Override
 	public List<TarifaDetModel> execute(List<TarifaDetInput> body, String url, String token) {
 		
-		RestClient restClient = RestClient.create();
+		RestClient restClient = RestClient.builder()
+                .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .build();
 		
 		ResponseEntity<List<TarifaDetModel>> tarifaList = null;
 		
@@ -62,10 +64,6 @@ public class RestClientMasterTarifaImpl implements RestClientMaster<List<TarifaD
 			tarifaList = restClient.post()
 				.uri(url)
 				.body(body)
-			    /*.headers(httpHeaders -> {
-			        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-			        httpHeaders.setBearerAuth(token);
-			    })*/
 				.accept(MediaType.APPLICATION_JSON)
 				.retrieve()	
 		        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {

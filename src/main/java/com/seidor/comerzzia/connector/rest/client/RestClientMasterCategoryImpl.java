@@ -54,7 +54,9 @@ public class RestClientMasterCategoryImpl implements RestClientMaster<List<Categ
 	@Override
 	public List<CategorizacionModel> execute(List<CategorizacionInput> body, String url, String token) {
 
-		RestClient restClient = RestClient.create();
+		RestClient restClient = RestClient.builder()
+                .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .build();
 		
 		ResponseEntity<List<CategorizacionModel>> categorizacionList = null;
 		
@@ -62,10 +64,6 @@ public class RestClientMasterCategoryImpl implements RestClientMaster<List<Categ
 			categorizacionList = restClient.post()
 			.uri(url)
 			.body(body)
-		    /*.headers(httpHeaders -> {
-		        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-		        httpHeaders.setBearerAuth(token);
-		    })*/
 			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()		
 	        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {

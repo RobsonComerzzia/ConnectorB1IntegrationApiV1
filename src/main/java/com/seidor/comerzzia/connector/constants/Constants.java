@@ -31,5 +31,9 @@ public final class Constants {
 	public static String UNIDADE = "U";
 	
 	public static String GENERAL = "GENERAL";
+	
+	public static String GRAN_TYPE = "grant_type";
+	
+	public static String SCOPE = "scope";
 
 }

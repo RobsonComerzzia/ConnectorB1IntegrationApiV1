@@ -27,10 +27,10 @@ public class RestClientMasterArticulosImpImpl implements RestClientMaster<Articu
 			restClient.post()
 			.uri(url)
 			.body(body)
-		    /*.headers(httpHeaders -> {
+		    .headers(httpHeaders -> {
 		        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 		        httpHeaders.setBearerAuth(token);
-		    })*/
+		    })
 			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()
 	        .onStatus(httpStatusCode -> httpStatusCode.is2xxSuccessful(), (req, res) -> {
@@ -54,7 +54,9 @@ public class RestClientMasterArticulosImpImpl implements RestClientMaster<Articu
 	@Override
 	public ArticulosImpuestoModel execute(ArticulosImpuestoInput body, String url, String token) {
 	
-		RestClient restClient = RestClient.create();
+		RestClient restClient = RestClient.builder()
+                .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .build();
 		
 		ResponseEntity<ArticulosImpuestoModel> response = null;
 		
@@ -62,10 +64,6 @@ public class RestClientMasterArticulosImpImpl implements RestClientMaster<Articu
 			response = restClient.post()
 					.uri(url)
 					.body(body)
-				    /*.headers(httpHeaders -> {
-				        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-				        httpHeaders.setBearerAuth(token);
-				    })*/
 					.accept(MediaType.APPLICATION_JSON)
 					.retrieve()
 			        .onStatus(httpStatusCode -> httpStatusCode.is2xxSuccessful(), (req, res) -> {

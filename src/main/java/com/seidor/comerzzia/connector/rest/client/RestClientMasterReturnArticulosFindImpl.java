@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterArticulosFindImpl implements RestClientMasterReturn<List<Articulo>> {
+public class RestClientMasterReturnArticulosFindImpl implements RestClientMasterReturn<List<Articulo>> {
 
 	private static String NAME_CLASS = "[RestClientMasterArticulosFindImpl]";
 	
@@ -26,6 +26,7 @@ public class RestClientMasterArticulosFindImpl implements RestClientMasterReturn
 		
 		RestClient restClient = RestClient.builder()
 				.baseUrl(url)
+                .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
 				.build();
 		
 		try {

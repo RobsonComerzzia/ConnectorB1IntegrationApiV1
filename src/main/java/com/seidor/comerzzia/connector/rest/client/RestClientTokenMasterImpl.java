@@ -1,18 +1,21 @@
 package com.seidor.comerzzia.connector.rest.client;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Base64;
 
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.seidor.comerzzia.connector.api.v1.model.ResponseTokenModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.AuthenticationBodyInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.AuthenticationInput;
+import com.seidor.comerzzia.connector.constants.Constants;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,43 +28,28 @@ public class RestClientTokenMasterImpl implements RestClientToken<Authentication
 	@Override
 	public ResponseTokenModel execute(AuthenticationInput body, String url) {
 		
-		RestClient restClient = RestClient.create(); 
-		
-		ResponseEntity<ResponseTokenModel> result = null;
+		log.info("{} - Obtendo Token da Master API", NAME_CLASS);
 		
 		AuthenticationBodyInput body2 = AuthenticationBodyInput.builder()
 				.grant_type(body.getGranType())
-				//.scope(body.getScope())
+				.scope(body.getScope())
 				.build();
 		
-		try {
-			result = restClient.post()
-					.uri(new URI(url))
-					.body(body2)
-					//.header("Authorization", getBasicAuthenticationHeader(body.getUsername(), body.getPassword()))
-				    .headers(httpHeaders -> {
-				    	httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
-				        httpHeaders.setBasicAuth(body.getUsername(), body.getPassword());
-				    })
-					.retrieve()
-			        .onStatus(httpStatusCode -> httpStatusCode.value() == 302, (req, res) -> {
-			        	String json = new String(res.getBody().readAllBytes());
-			        	log.error("{} - {}", NAME_CLASS, json);
-			         })
-			        .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
-			        	String json = new String(res.getBody().readAllBytes());
-			        	log.error("{} - {}", NAME_CLASS, json);
-			         })
-			        .onStatus(httpStatusCode -> httpStatusCode.is5xxServerError(), (req, res) -> {
-			        	String json = new String(res.getBody().readAllBytes());
-			        	log.error("{} - ERRO url {}: {}", NAME_CLASS, url, json);
-			         })
-					.toEntity(ResponseTokenModel.class);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add(Constants.GRAN_TYPE, body2.getGrant_type());
+        formData.add(Constants.SCOPE, body2.getScope());
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.add("Authorization", RestClientTokenMasterImpl.getBasicAuthenticationHeader(body.getUsername(), body.getPassword()));
+        
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(formData, headers);
+        
+        RestTemplate restTemplate = new RestTemplate();
+   
+        ResponseEntity<ResponseTokenModel> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, ResponseTokenModel.class);
 		
-		return result.getBody();
+		return response.getBody();
 		
 	}
 	
