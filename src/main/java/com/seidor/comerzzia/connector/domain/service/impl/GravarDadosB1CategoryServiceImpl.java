@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.seidor.comerzzia.connector.api.v1.assembler.JsonCategoryInputDisassembler;
-import com.seidor.comerzzia.connector.api.v1.model.input.JsonCategoryInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.innerclass.JsonCategoryInnerInput;
 import com.seidor.comerzzia.connector.domain.model.CategoryB1;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
