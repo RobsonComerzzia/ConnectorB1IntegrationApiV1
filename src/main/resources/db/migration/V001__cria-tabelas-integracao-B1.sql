@@ -14,7 +14,8 @@ create table tax_b1 (
     cst_icms varchar(2) NOT NULL,
     cst_pis varchar(2) NOT NULL,
     cst_cofins varchar(2) NOT NULL,
-    process_date datetime NOT NULL
+    process_date datetime NOT NULL,
+    last_send_date datetime
     /*UNIQUE KEY taxb1_uk (state,ncm)*/
 ) engine=InnoDB default charset=utf8;
 

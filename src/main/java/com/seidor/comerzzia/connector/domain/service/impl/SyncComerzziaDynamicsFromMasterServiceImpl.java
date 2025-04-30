@@ -1,8 +1,12 @@
 package com.seidor.comerzzia.connector.domain.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.core.annotation.Order;
@@ -12,16 +16,19 @@ import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzi
 import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.DynamicArticuloModel;
+import com.seidor.comerzzia.connector.api.v1.model.DynamicModel;
 import com.seidor.comerzzia.connector.api.v1.model.ItemTaxResponseModel;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.DynamicInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
+import com.seidor.comerzzia.connector.constants.Constants;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
+import com.seidor.comerzzia.connector.domain.model.TaxB1;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
@@ -34,11 +41,11 @@ import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Order(3)
+@Order(4)
 @Service
-public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
+public class SyncComerzziaDynamicsFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
 
-	public SyncComerzziaArticulosImpuestoFromMasterServiceImpl(
+	public SyncComerzziaDynamicsFromMasterServiceImpl(
 			TaxB1Repository taxB1Repository,
 			ItemB1Repository itemB1Repository,
 			ItemPriceB1Repository itemPriceB1Repository,
@@ -57,37 +64,33 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 	@Override
 	public void invokeApiComerzzia(String url, String token) {
 		
-		log.info("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Articulos x Impuesto com o B1.");
+		log.info("[SyncComerzziaDynamicsFromMasterServiceImpl] - Invocando Api Comerzzia para sincronização de Dynamics com o B1.");
 		
-		List<ArticuloImpuestoInput> requestList = new ArrayList<ArticuloImpuestoInput>();
+		List<DynamicArticuloInput> requestList = new ArrayList<DynamicArticuloInput>();
 		
-		List<ItemTaxResponseModel> taxes = this.getDataFromMasterB1();
+		List<ItemTaxResponseModel> prices = this.getDataFromMasterB1();
 		
-		requestList.addAll(this.buildBody(taxes));
+		requestList.addAll(this.buildBody(prices));
 		
-		if (requestList.size() > 0) {	
-			ArticulosImpuestoInput articulos = ArticulosImpuestoInput.builder()
-					.articulos(requestList)
-					.build();
+		if (requestList.size() > 0) {
+			List<DynamicArticuloModel> response = restClientDynamics.execute(requestList, url  + "item/dynamics", token);
 			
-			ArticulosImpuestoModel response = restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
-			
-			if (response.getData().size() > 0) {
-				log.info("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - {} taxas sincronizadas com o Comerzzia.", response.getData().size());
+			if (response.size() > 0) {
+				this.setLastSendDate(response);
+				log.info("[SyncComerzziaDynamicsFromMasterServiceImpl] - {} dynamics sincronizadas com o Comerzzia.", response.size());
 			} else {
-				log.warn("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Nenhuma taxa sincronizada com o Comerzzia!");
+				log.warn("[SyncComerzziaDynamicsFromMasterServiceImpl] - Nenhuma dynamic sincronizada com o Comerzzia!");
 			}	
-			
 		} else {
-			log.warn("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Nenhuma taxa sincronizada com o Comerzzia!");
+			log.warn("[SyncComerzziaDynamicsFromMasterServiceImpl] - Nenhuma dynamic sincronizada com o Comerzzia!");
 		}
 		
 	}
-
+	
 	@Override
 	public List<ItemTaxResponseModel> getDataFromMasterB1() {
 
-	    List<Tuple> itemTaxTuples = itemB1Repository.findItemTaxes();
+	    List<Tuple> itemTaxTuples = itemB1Repository.findItemTaxesDynamics();
 	    
 	    List<ItemTaxResponseModel> itemTaxModel = itemTaxTuples.stream()
 	            .map(t -> new ItemTaxResponseModel(
@@ -108,21 +111,68 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 		
 	}
 	
-	private List<ArticuloImpuestoInput> buildBody(List<ItemTaxResponseModel> taxes){
+	private List<DynamicArticuloInput> buildBody(List<ItemTaxResponseModel> prices){
 		
-		List<ArticuloImpuestoInput> articulos = new ArrayList<>();
+		List<DynamicArticuloInput> requestList = new ArrayList<>();
 		
-		for (ItemTaxResponseModel item: taxes) {
-			ArticuloImpuestoInput articulo = ArticuloImpuestoInput.builder()
-					.state(item.getState())
-					.itemCode(item.getItemCode())
-					.ncmCode(item.getNcmCode())
-					.cstIcms(item.getCstIcms())
-					.icms(item.getIcms())
-					.build();
-			articulos.add(articulo);
+		for (ItemTaxResponseModel item: prices) {
+			DynamicArticuloInput dynamic = DynamicArticuloInput.builder()
+				.codart(item.getItemCode())
+				.dynamics(this.buildDynamicInputs(item))
+				.build();
+			requestList.add(dynamic);
 		}
-		return articulos;
+		return requestList;
+		
+	}
+	
+	private List<DynamicInput> buildDynamicInputs(ItemTaxResponseModel item){
+		
+		List<DynamicInput> dynamics = new ArrayList<>();
+		
+		Map<String, String> map = new HashMap<>();
+		
+		map.put(Constants.TAX_ALIQUOTA_PIS, item.getPis().toString());
+		map.put(Constants.TAX_ALIQUOTA_COFINS, item.getCofins().toString());
+		map.put(Constants.TAX_CARGA_TRIB, "0.000000");
+		map.put(Constants.TAX_CARGA_TRIB_EST, "0.000000");
+		map.put(Constants.TAX_CARGA_TRIB_MUN, "0.000000");
+		map.put(Constants.TAX_CEST, "0");
+		map.put(Constants.TAX_CODIGO_ORIGEM, "0");
+		map.put(Constants.TAX_CST_COFINS, item.getCstCofins());
+		map.put(Constants.TAX_CST_PIS, item.getCstPis());
+		map.put(Constants.TAX_NCM, item.getNcmCode());
+		
+		map.forEach((key, value) -> {
+			DynamicInput dynamic = DynamicInput.builder()
+					.key(key)
+					.value(value)
+					.build();
+			dynamics.add(dynamic);
+		});
+		
+		return dynamics;
+	}
+	
+	private void setLastSendDate(List<DynamicArticuloModel> response) {
+		
+		if (response.size() > 0) {
+			response.stream().forEach(dynamicArt -> {
+				
+				Optional<DynamicModel> dynamicResult = dynamicArt.getDynamics().stream().filter(dynamic -> dynamic.getKey().equals(Constants.TAX_NCM)).findFirst();
+				
+				dynamicResult.ifPresent(item -> {
+					
+					List<TaxB1> taxB1List = taxB1Repository.findByNcm(item.getValue());
+					if (taxB1List.size() > 0) {
+						taxB1List.forEach(tax -> tax.setLastSendDate(LocalDateTime.now()));
+						taxB1Repository.saveAll(taxB1List);
+					}	
+					
+				});
+				
+			});
+		}
 		
 	}
 

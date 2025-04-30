@@ -35,5 +35,25 @@ public final class Constants {
 	public static String GRAN_TYPE = "grant_type";
 	
 	public static String SCOPE = "scope";
+	
+	public static String TAX_ALIQUOTA_COFINS = "TAX_ALIQUOTA_COFINS";
+	
+	public static String TAX_ALIQUOTA_PIS = "TAX_ALIQUOTA_PIS";
+	
+	public static String TAX_CARGA_TRIB = "TAX_CARGA_TRIB";
+	
+	public static String TAX_CARGA_TRIB_EST = "TAX_CARGA_TRIB_EST";
+	
+	public static String TAX_CARGA_TRIB_MUN = "TAX_CARGA_TRIB_MUN";
+	
+	public static String TAX_CEST = "TAX_CEST";
+	
+	public static String TAX_CODIGO_ORIGEM = "TAX_CODIGO_ORIGEM";
+	
+	public static String TAX_CST_COFINS = "TAX_CST_COFINS";
+	
+	public static String TAX_CST_PIS = "TAX_CST_PIS";
+	
+	public static String TAX_NCM = "TAX_NCM";
 
 }

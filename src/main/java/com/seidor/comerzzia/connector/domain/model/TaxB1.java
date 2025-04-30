@@ -76,6 +76,9 @@ public class TaxB1 {
 	@Column(name = "process_date", nullable = true)
 	private LocalDateTime processDate;
 	
+	@Column(name = "last_send_date", nullable = true)
+	private LocalDateTime lastSendDate;	
+	
     @PrePersist
     public void prePersist() {
     	

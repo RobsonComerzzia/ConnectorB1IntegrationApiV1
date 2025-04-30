@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
+import com.seidor.comerzzia.connector.api.v1.model.DynamicArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.GuidB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.VerifyB1Model;
@@ -14,6 +15,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.GuidB1ModelInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ItemsGravarInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.JsonCategoryInput;
@@ -30,6 +32,7 @@ import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceListB1Repository;
+import com.seidor.comerzzia.connector.domain.repository.TaxB1Repository;
 import com.seidor.comerzzia.connector.domain.service.GravarDadosB1Service;
 import com.seidor.comerzzia.connector.domain.service.OauthService;
 import com.seidor.comerzzia.connector.rest.client.RestClientB1Api;
@@ -83,7 +86,10 @@ public abstract class IntegrationProcessServiceBase {
 	private GravarDadosB1Service<List<JsonPartnerInput>> gravarDadosPartnerService;
 	
 	@Autowired
-	private GravarDadosB1Service<List<JsonCategoryInnerInput>> gravarDadosCategoryService;	
+	private GravarDadosB1Service<List<JsonCategoryInnerInput>> gravarDadosCategoryService;
+	
+	@Autowired
+	private TaxB1Repository taxB1Repository;
 	
 	@Autowired
 	private ItemB1Repository itemB1Repository;
@@ -114,6 +120,9 @@ public abstract class IntegrationProcessServiceBase {
 	
 	@Autowired
 	private RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategory;
+	
+	@Autowired
+	private RestClientMaster<List<DynamicArticuloModel>, List<DynamicArticuloInput>> restClientDynamics;
 	
 	
 	protected Class<?>[] loadTypesConstructorsB1(){
@@ -164,7 +173,8 @@ public abstract class IntegrationProcessServiceBase {
 	protected Class<?>[] loadTypesConstructorsComerzzia(){
 		
 		Class<?>[] typesClassConstructor = {
-				  ItemB1Repository.class
+				  TaxB1Repository .class
+				, ItemB1Repository.class
 				, ItemPriceB1Repository.class
 				, ItemPriceListB1Repository.class
 				, CategoryB1Repository.class  
@@ -172,6 +182,7 @@ public abstract class IntegrationProcessServiceBase {
 				, RestClientMaster.class
 				, RestClientMaster.class
 				, RestClientMasterReturn.class
+				, RestClientMaster.class
 				, RestClientMaster.class
 			};
 		
@@ -181,8 +192,9 @@ public abstract class IntegrationProcessServiceBase {
 	
 	protected Object[] loadValuesConstructorsComerzzia() {
 		
-		Object[] valuesClassConstructor = { 
-				  itemB1Repository
+		Object[] valuesClassConstructor = {
+				  taxB1Repository
+				, itemB1Repository
 				, itemPriceB1Repository
 				, itemPriceListB1Repository
 				, categoryB1Repository
@@ -191,6 +203,7 @@ public abstract class IntegrationProcessServiceBase {
 				, restClientTarifa
 				, restClientArticulo
 				, restClientCategory
+				, restClientDynamics
 			};
 		
 		return valuesClassConstructor;
