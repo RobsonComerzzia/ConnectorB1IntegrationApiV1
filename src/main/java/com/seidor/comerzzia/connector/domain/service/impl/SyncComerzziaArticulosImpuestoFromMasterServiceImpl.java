@@ -104,7 +104,9 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 	                    t.get(6, String.class),
 	                    t.get(7, String.class),
 	                    t.get(8, String.class),
-	                    t.get(9, String.class)
+	                    t.get(9, String.class),
+	                    t.get(10, String.class),
+	                    t.get(11, String.class)
 	                    ))
 	            .collect(Collectors.toList());
 	    

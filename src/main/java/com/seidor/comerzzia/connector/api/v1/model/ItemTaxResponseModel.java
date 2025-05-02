@@ -33,5 +33,9 @@ public class ItemTaxResponseModel implements Serializable {
 	private String cstCofins;
 	
 	private String category;
+	
+	private String cest;
+	
+	private String productSrc;
 
 }

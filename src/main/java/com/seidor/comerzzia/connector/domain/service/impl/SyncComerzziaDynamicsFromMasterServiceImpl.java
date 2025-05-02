@@ -103,7 +103,9 @@ public class SyncComerzziaDynamicsFromMasterServiceImpl extends ConstructorsAbst
 	                    t.get(6, String.class),
 	                    t.get(7, String.class),
 	                    t.get(8, String.class),
-	                    t.get(9, String.class)
+	                    t.get(9, String.class),
+	                    t.get(10, String.class),
+	                    t.get(11, String.class)
 	                    ))
 	            .collect(Collectors.toList());
 	    
@@ -137,8 +139,8 @@ public class SyncComerzziaDynamicsFromMasterServiceImpl extends ConstructorsAbst
 		map.put(Constants.TAX_CARGA_TRIB, "0.000000");
 		map.put(Constants.TAX_CARGA_TRIB_EST, "0.000000");
 		map.put(Constants.TAX_CARGA_TRIB_MUN, "0.000000");
-		map.put(Constants.TAX_CEST, "0");
-		map.put(Constants.TAX_CODIGO_ORIGEM, "0");
+		map.put(Constants.TAX_CEST, item.getCest());
+		map.put(Constants.TAX_CODIGO_ORIGEM, item.getProductSrc());
 		map.put(Constants.TAX_CST_COFINS, item.getCstCofins());
 		map.put(Constants.TAX_CST_PIS, item.getCstPis());
 		map.put(Constants.TAX_NCM, item.getNcmCode());
