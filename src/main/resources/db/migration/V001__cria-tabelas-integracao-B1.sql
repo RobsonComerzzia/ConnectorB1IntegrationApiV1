@@ -44,9 +44,12 @@ create table item_b1 (
 	num_in_sale decimal(13,6),
 	sal_pack_msr varchar(10),
 	sal_pack_unit decimal(13,6),
-	u_cmzb1_venda_unit varchar(1), 
+	u_cmzb1_venda_unit varchar(1),
+	product_src varchar(10),
+	cest varchar(10), 
 	update_date datetime,
 	last_send_date datetime,
+	last_send_date_imp datetime,
     primary key(id),
     UNIQUE KEY itemb1_uk (item_code,ncm_code)
 ) engine=InnoDB default charset=utf8;

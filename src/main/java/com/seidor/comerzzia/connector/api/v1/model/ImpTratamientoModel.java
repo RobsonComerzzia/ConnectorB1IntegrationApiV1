@@ -24,6 +24,11 @@ public class ImpTratamientoModel {
 	@JsonProperty("taxTreatmentId")
 	private Long idTratImpuestos;
 	
+	@Schema(example = "1504")
+	@NotBlank
+	@JsonProperty("itemCode")
+	private String itemCode;
+	
 	@Schema(example = "BR-SP")
 	@NotBlank
 	@JsonProperty("taxTreatmentCode")

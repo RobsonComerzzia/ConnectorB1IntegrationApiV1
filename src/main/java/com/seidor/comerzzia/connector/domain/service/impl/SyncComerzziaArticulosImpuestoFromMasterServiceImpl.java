@@ -1,8 +1,10 @@
 package com.seidor.comerzzia.connector.domain.service.impl;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.core.annotation.Order;
@@ -22,6 +24,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
+import com.seidor.comerzzia.connector.domain.model.ItemB1;
 import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
@@ -73,6 +76,7 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 			ArticulosImpuestoModel response = restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
 			
 			if (response.getData().size() > 0) {
+				this.setLastSendDate(response);
 				log.info("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - {} taxas sincronizadas com o Comerzzia.", response.getData().size());
 			} else {
 				log.warn("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Nenhuma taxa sincronizada com o Comerzzia!");
@@ -123,6 +127,20 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 			articulos.add(articulo);
 		}
 		return articulos;
+		
+	}
+	
+	private void setLastSendDate(ArticulosImpuestoModel response) {
+		
+		if (response.getData().size() > 0) {
+			response.getData().stream().forEach(art -> {
+				Optional<ItemB1> item = itemB1Repository.findByItemCode(art.getItemCode());
+				if (item.isPresent()) {
+					item.get().setLastSendDateImp(LocalDateTime.now());
+					itemB1Repository.save(item.get());
+				}
+			});
+		}
 		
 	}
 

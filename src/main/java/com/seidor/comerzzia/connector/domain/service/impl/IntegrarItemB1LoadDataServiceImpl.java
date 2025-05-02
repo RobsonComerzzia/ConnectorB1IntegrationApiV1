@@ -100,7 +100,7 @@ public class IntegrarItemB1LoadDataServiceImpl extends ConstructorsAbstractInteg
 				
 				this.gravarDadosItemService.gravar(itemsGravar);
 				
-				this.setReceived(guidModel);
+				//this.setReceived(guidModel);
 				log.info("[IntegrarB1ProcessServiceImpl] - Fim do processamento de Item");
 			} else {
 				log.warn("[IntegrarB1ProcessServiceImpl] - Não há dados para processamento de Item");
