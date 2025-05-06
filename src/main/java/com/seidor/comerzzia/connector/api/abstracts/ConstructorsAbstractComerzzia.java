@@ -5,9 +5,9 @@ import java.util.List;
 import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.DynamicArticuloModel;
-import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
+
+import com.seidor.comerzzia.connector.api.v1.model.ImpTratamientoModel;import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
@@ -39,7 +39,7 @@ public abstract class ConstructorsAbstractComerzzia<T> implements SyncComerzziaF
 	
 	public RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos;
 	
-	public RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp;
+	public RestClientMaster<List<ImpTratamientoModel>, ArticulosImpuestoInput> restClientArticulosImp;
 	
 	public RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa;
 	

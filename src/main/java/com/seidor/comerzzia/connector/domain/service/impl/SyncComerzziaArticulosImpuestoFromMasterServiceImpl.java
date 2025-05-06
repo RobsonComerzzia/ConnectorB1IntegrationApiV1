@@ -14,11 +14,11 @@ import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzi
 import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.DynamicArticuloModel;
+import com.seidor.comerzzia.connector.api.v1.model.ImpTratamientoModel;
 import com.seidor.comerzzia.connector.api.v1.model.ItemTaxResponseModel;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticuloImpuestoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
@@ -41,20 +41,18 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemTaxResponseModel>> {
 
-	public SyncComerzziaArticulosImpuestoFromMasterServiceImpl(
-			TaxB1Repository taxB1Repository,
-			ItemB1Repository itemB1Repository,
-			ItemPriceB1Repository itemPriceB1Repository,
-			ItemPriceListB1Repository itemPriceListB1Repository,
-			CategoryB1Repository categoryB1Repository,
+	public SyncComerzziaArticulosImpuestoFromMasterServiceImpl(TaxB1Repository taxB1Repository,
+			ItemB1Repository itemB1Repository, ItemPriceB1Repository itemPriceB1Repository,
+			ItemPriceListB1Repository itemPriceListB1Repository, CategoryB1Repository categoryB1Repository,
 			RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos,
-			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
+			RestClientMaster<List<ImpTratamientoModel>, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
 			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion,
 			RestClientMaster<List<DynamicArticuloModel>, List<DynamicArticuloInput>> restClientDynamics) {
-		super(taxB1Repository, itemB1Repository, itemPriceB1Repository, itemPriceListB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
-				restClientArticulo, restClientCategorizacion, restClientDynamics);
+		super(taxB1Repository, itemB1Repository, itemPriceB1Repository, itemPriceListB1Repository, categoryB1Repository,
+				restClientArticulos, restClientArticulosImp, restClientTarifa, restClientArticulo, restClientCategorizacion,
+				restClientDynamics);
 	}
 
 	@Override
@@ -73,17 +71,17 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 					.articulos(requestList)
 					.build();
 			
-			ArticulosImpuestoModel response = restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
+			List<ImpTratamientoModel> response = restClientArticulosImp.execute(articulos, url  + "item/taxbystate", token);
 			
-			if (response.getData().size() > 0) {
+			if (response.size() > 0) {
 				this.setLastSendDate(response);
-				log.info("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - {} taxas sincronizadas com o Comerzzia.", response.getData().size());
+				log.info("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - {} taxas sincronizadas com o Comerzzia.", response.size());
 			} else {
-				log.warn("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Nenhuma taxa sincronizada com o Comerzzia!");
+				log.warn("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Nenhuma taxa (vinculo imposto ao produto) sincronizada com o Comerzzia!");
 			}	
 			
 		} else {
-			log.warn("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Nenhuma taxa sincronizada com o Comerzzia!");
+			log.warn("[SyncComerzziaArticulosImpuestoFromMasterServiceImpl] - Nenhuma taxa (vinculo imposto ao produto) sincronizada com o Comerzzia!");
 		}
 		
 	}
@@ -132,11 +130,11 @@ public class SyncComerzziaArticulosImpuestoFromMasterServiceImpl extends Constru
 		
 	}
 	
-	private void setLastSendDate(ArticulosImpuestoModel response) {
+	private void setLastSendDate(List<ImpTratamientoModel> response) {
 		
-		if (response.getData().size() > 0) {
-			response.getData().stream().forEach(art -> {
-				Optional<ItemB1> item = itemB1Repository.findByItemCode(art.getItemCode());
+		if (response.size() > 0) {
+			response.stream().forEach(art -> {
+				Optional<ItemB1> item = itemB1Repository.findByItemCode(art.getCodart());
 				if (item.isPresent()) {
 					item.get().setLastSendDateImp(LocalDateTime.now());
 					itemB1Repository.save(item.get());

@@ -9,10 +9,10 @@ import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.DynamicArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.GuidB1Model;
-import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
+
+import com.seidor.comerzzia.connector.api.v1.model.ImpTratamientoModel;import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.VerifyB1Model;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
@@ -107,7 +107,7 @@ public abstract class IntegrationProcessServiceBase {
 	private RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos;
 	
 	@Autowired
-	private RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp;
+	private RestClientMaster<List<ImpTratamientoModel>, ArticulosImpuestoInput> restClientArticulosImp;
 	
 	@Autowired
 	private RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa;

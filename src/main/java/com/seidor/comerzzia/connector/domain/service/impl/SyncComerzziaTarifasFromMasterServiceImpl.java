@@ -15,10 +15,10 @@ import com.seidor.comerzzia.connector.api.abstracts.ConstructorsAbstractComerzzi
 import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.DynamicArticuloModel;
+import com.seidor.comerzzia.connector.api.v1.model.ImpTratamientoModel;
 import com.seidor.comerzzia.connector.api.v1.model.ItemPriceResponseModel;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
@@ -42,20 +42,18 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class SyncComerzziaTarifasFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<ItemPriceResponseModel>> {
 
-	public SyncComerzziaTarifasFromMasterServiceImpl(
-			TaxB1Repository taxB1Repository,
-			ItemB1Repository itemB1Repository,
-			ItemPriceB1Repository itemPriceB1Repository,
-			ItemPriceListB1Repository itemPriceListB1Repository,
+	public SyncComerzziaTarifasFromMasterServiceImpl(TaxB1Repository taxB1Repository, ItemB1Repository itemB1Repository,
+			ItemPriceB1Repository itemPriceB1Repository, ItemPriceListB1Repository itemPriceListB1Repository,
 			CategoryB1Repository categoryB1Repository,
 			RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos,
-			RestClientMaster<ArticulosImpuestoModel, ArticulosImpuestoInput> restClientArticulosImp,
+			RestClientMaster<List<ImpTratamientoModel>, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
 			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion,
 			RestClientMaster<List<DynamicArticuloModel>, List<DynamicArticuloInput>> restClientDynamics) {
-		super(taxB1Repository, itemB1Repository, itemPriceB1Repository, itemPriceListB1Repository, categoryB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa,
-				restClientArticulo, restClientCategorizacion, restClientDynamics);
+		super(taxB1Repository, itemB1Repository, itemPriceB1Repository, itemPriceListB1Repository, categoryB1Repository,
+				restClientArticulos, restClientArticulosImp, restClientTarifa, restClientArticulo, restClientCategorizacion,
+				restClientDynamics);
 	}
 
 	@Override

@@ -1,12 +1,15 @@
 package com.seidor.comerzzia.connector.rest.client;
 
+import java.util.List;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import com.seidor.comerzzia.connector.api.v1.model.ImpTratamientoModel;
 import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoModel;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterArticulosImpImpl implements RestClientMaster<ArticulosImpuestoModel ,ArticulosImpuestoInput> {
+public class RestClientMasterArticulosImpImpl implements RestClientMaster<List<ImpTratamientoModel> ,ArticulosImpuestoInput> {
 
 	private static String NAME_CLASS = "[RestClientMasterImpl]";
 	
@@ -52,13 +55,13 @@ public class RestClientMasterArticulosImpImpl implements RestClientMaster<Articu
 	}
 
 	@Override
-	public ArticulosImpuestoModel execute(ArticulosImpuestoInput body, String url, String token) {
+	public List<ImpTratamientoModel> execute(ArticulosImpuestoInput body, String url, String token) {
 	
 		RestClient restClient = RestClient.builder()
                 .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .build();
 		
-		ResponseEntity<ArticulosImpuestoModel> response = null;
+		ResponseEntity<List<ImpTratamientoModel>> response = null;
 		
 		try {
 			response = restClient.post()
@@ -66,10 +69,6 @@ public class RestClientMasterArticulosImpImpl implements RestClientMaster<Articu
 					.body(body)
 					.accept(MediaType.APPLICATION_JSON)
 					.retrieve()
-			        .onStatus(httpStatusCode -> httpStatusCode.is2xxSuccessful(), (req, res) -> {
-			        	String json = new String(res.getBody().readAllBytes());
-			        	log.info("{} - Sucesso {} : {}", res.getStatusCode(), NAME_CLASS, json);
-			         })
 			        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
 			        	String json = new String(res.getBody().readAllBytes());
 			        	log.error("{} - Erro {} : {}", res.getStatusCode(), NAME_CLASS, json);
@@ -78,7 +77,7 @@ public class RestClientMasterArticulosImpImpl implements RestClientMaster<Articu
 			        	String json = new String(res.getBody().readAllBytes());
 			        	log.error("{} - ERRO {}: {}", res.getStatusCode(), NAME_CLASS, json);
 			         })	
-					.toEntity(ArticulosImpuestoModel.class);			
+			        .toEntity(new ParameterizedTypeReference<List<ImpTratamientoModel>>() {});			
 		} catch (Exception e) {
 			log.error("{} - Falha ao atualizar dados de Impostos no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
