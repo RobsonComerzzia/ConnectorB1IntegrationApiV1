@@ -32,5 +32,37 @@ public abstract class Utils {
 		
 		return totalPages;
 	}
+	
+	public static String cleanString(String item) {
+		
+		if (item == null || item == "")
+			return null;
+			
+		String item2 = item.replace(".", "")
+			.replace("-", "")
+			.replace("/", "")
+			.toUpperCase();
+		
+		return item2;
+		
+	}
+	
+	public static String formatarCPF(String cpf) {
+		
+		if (cpf == null)
+			return null;
+		
+	    cpf = cpf.replaceAll("[^0-9]", ""); // Remover caracteres não numéricos
+	    return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+	}
+	
+	public static String formatarCNPJ(String cnpj) {
+		
+		if (cnpj == null)
+			return null;
+		
+	    cnpj = cnpj.replaceAll("[^0-9]", ""); // Remover caracteres não numéricos
+	    return cnpj.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
+	}
 
 }

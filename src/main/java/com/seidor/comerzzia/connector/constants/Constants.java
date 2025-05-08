@@ -55,5 +55,13 @@ public final class Constants {
 	public static String TAX_CST_PIS = "TAX_CST_PIS";
 	
 	public static String TAX_NCM = "TAX_NCM";
+	
+	public static String PT_BR = "PT-BR";
+	
+	public static String BR = "BR";
+	
+	public static String CNPJ = "CNPJ";
+	
+	public static String CPF = "CPF";
 
 }

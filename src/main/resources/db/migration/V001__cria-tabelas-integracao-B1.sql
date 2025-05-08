@@ -106,6 +106,7 @@ create table partner_b1 (
     update_date_master datetime,
 	street varchar(100),
 	block varchar(150),
+	city varchar(100),
 	state varchar(2),
 	zip_code varchar(20),
 	tax_id0 varchar(50),

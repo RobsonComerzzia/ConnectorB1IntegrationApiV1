@@ -17,6 +17,7 @@ import com.seidor.comerzzia.connector.api.v1.model.ArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
 import com.seidor.comerzzia.connector.api.v1.model.DynamicArticuloModel;
 import com.seidor.comerzzia.connector.api.v1.model.DynamicModel;
+import com.seidor.comerzzia.connector.api.v1.model.FidelizadoModel;
 import com.seidor.comerzzia.connector.api.v1.model.ImpTratamientoModel;
 import com.seidor.comerzzia.connector.api.v1.model.ItemTaxResponseModel;
 import com.seidor.comerzzia.connector.api.v1.model.TarifaDetModel;
@@ -25,6 +26,7 @@ import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.DynamicInput;
+import com.seidor.comerzzia.connector.api.v1.model.input.FidelizadoInput;
 import com.seidor.comerzzia.connector.api.v1.model.input.TarifaDetInput;
 import com.seidor.comerzzia.connector.constants.Constants;
 import com.seidor.comerzzia.connector.domain.model.Articulo;
@@ -33,6 +35,7 @@ import com.seidor.comerzzia.connector.domain.repository.CategoryB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.ItemPriceListB1Repository;
+import com.seidor.comerzzia.connector.domain.repository.PartnerB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.TaxB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
@@ -48,16 +51,17 @@ public class SyncComerzziaDynamicsFromMasterServiceImpl extends ConstructorsAbst
 	public SyncComerzziaDynamicsFromMasterServiceImpl(TaxB1Repository taxB1Repository,
 			ItemB1Repository itemB1Repository, ItemPriceB1Repository itemPriceB1Repository,
 			ItemPriceListB1Repository itemPriceListB1Repository, CategoryB1Repository categoryB1Repository,
+			PartnerB1Repository partnerB1Repository,
 			RestClientMaster<List<ArticuloModel>, ArticulosInput> restClientArticulos,
 			RestClientMaster<List<ImpTratamientoModel>, ArticulosImpuestoInput> restClientArticulosImp,
 			RestClientMaster<List<TarifaDetModel>, List<TarifaDetInput>> restClientTarifa,
 			RestClientMasterReturn<List<Articulo>> restClientArticulo,
 			RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> restClientCategorizacion,
-			RestClientMaster<List<DynamicArticuloModel>, List<DynamicArticuloInput>> restClientDynamics) {
+			RestClientMaster<List<DynamicArticuloModel>, List<DynamicArticuloInput>> restClientDynamics,
+			RestClientMaster<List<FidelizadoModel>, List<FidelizadoInput>> restClientFidelizados) {
 		super(taxB1Repository, itemB1Repository, itemPriceB1Repository, itemPriceListB1Repository, categoryB1Repository,
-				restClientArticulos, restClientArticulosImp, restClientTarifa, restClientArticulo, restClientCategorizacion,
-				restClientDynamics);
-
+				partnerB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa, restClientArticulo,
+				restClientCategorizacion, restClientDynamics, restClientFidelizados);
 	}
 
 	@Override
