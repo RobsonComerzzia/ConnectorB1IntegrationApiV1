@@ -150,9 +150,11 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 					
 					Optional<PartnerB1> partner = Optional.empty();
 					
-					if (p.getDocumento() != null)
+					if (p.getDocumento() != null) {
 						partner = partnerB1Repository.findByTaxId0OrTaxId4(Utils.formatarCNPJ(p.getDocumento()), Utils.formatarCPF(p.getDocumento()));
-					else
+						if (!partner.isPresent())
+							partner = partnerB1Repository.findByCardName(p.getNombre() + " " + p.getApellidos());
+					} else
 						partner = partnerB1Repository.findByCardName(p.getNombre() + " " + p.getApellidos());
 					
 					if (partner.isPresent()) {
