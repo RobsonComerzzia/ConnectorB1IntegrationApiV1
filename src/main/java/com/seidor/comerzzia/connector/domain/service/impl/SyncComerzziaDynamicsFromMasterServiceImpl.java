@@ -39,6 +39,7 @@ import com.seidor.comerzzia.connector.domain.repository.PartnerB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.TaxB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
+import com.seidor.comerzzia.connector.util.Utils;
 
 import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
@@ -137,12 +138,12 @@ public class SyncComerzziaDynamicsFromMasterServiceImpl extends ConstructorsAbst
 		
 		Map<String, String> map = new HashMap<>();
 		
-		map.put(Constants.TAX_ALIQUOTA_PIS, item.getPis().toString());
-		map.put(Constants.TAX_ALIQUOTA_COFINS, item.getCofins().toString());
-		map.put(Constants.TAX_CARGA_TRIB, "0.000000");
-		map.put(Constants.TAX_CARGA_TRIB_EST, "0.000000");
-		map.put(Constants.TAX_CARGA_TRIB_MUN, "0.000000");
-		map.put(Constants.TAX_CEST, item.getCest());
+		map.put(Constants.TAX_ALIQUOTA_PIS, Utils.formatNumber(item.getPis()));
+		map.put(Constants.TAX_ALIQUOTA_COFINS, Utils.formatNumber(item.getCofins()));
+		map.put(Constants.TAX_CARGA_TRIB, "0.00");
+		map.put(Constants.TAX_CARGA_TRIB_EST, "0.00");
+		map.put(Constants.TAX_CARGA_TRIB_MUN, "0.00");
+		map.put(Constants.TAX_CEST, Utils.cleanString(item.getCest()));
 		map.put(Constants.TAX_CODIGO_ORIGEM, item.getProductSrc());
 		map.put(Constants.TAX_CST_COFINS, item.getCstCofins());
 		map.put(Constants.TAX_CST_PIS, item.getCstPis());
