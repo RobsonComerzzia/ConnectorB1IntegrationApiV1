@@ -54,7 +54,7 @@ public abstract class Utils {
 		if (value == null)
 			return null;
 		
-		DecimalFormat df = new DecimalFormat("#.00");
+		DecimalFormat df = new DecimalFormat("#,00");
 		return df.format(value);
 		
 	}
