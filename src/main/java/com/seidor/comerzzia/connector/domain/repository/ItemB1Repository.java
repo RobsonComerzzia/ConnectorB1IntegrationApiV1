@@ -18,13 +18,45 @@ public interface ItemB1Repository extends JpaRepository<ItemB1, ItemB1.pk_itemB1
 	
 	public List<ItemB1> findByItemCodeInAndNcmCodeIn(List<String> itemsCode, List<String> ncmsCode);
 	
-	@Query(value = "select tax.state, item.item_code, item.ncm_code, tax.cst_icms, tax.icms, item.u_cmzb1_categ "
+	@Query(value = 
+			"select tax.state "
+			+ ", item.item_code "
+			+ ", item.ncm_code "
+			+ ", tax.icms "
+			+ ", tax.pis "
+			+ ", tax.cofins "
+			+ ", tax.cst_icms "
+			+ ", tax.cst_pis"
+			+ ", tax.cst_cofins "
+			+ ", item.u_cmzb1_categ "
+			+ ", item.cest "
+			+ ", item.product_src "
 			+ "from item_b1 item "
 			+ "inner join tax_b1 tax "
 			+ "on item.ncm_code = tax.ncm_code "
-			+ "where item.update_date > item.last_send_date or item.last_send_date is null "
+			+ "where item.update_date > item.last_send_date_imp or item.last_send_date_imp is null "
 			+ "and item.u_cmzb1_categ is not null", nativeQuery = true)
 	public List<Tuple> findItemTaxes();
+	
+	@Query(value = 
+			"select tax.state "
+			+ ", item.item_code "
+			+ ", item.ncm_code "
+			+ ", tax.icms "
+			+ ", tax.pis "
+			+ ", tax.cofins "
+			+ ", tax.cst_icms "
+			+ ", tax.cst_pis"
+			+ ", tax.cst_cofins "
+			+ ", item.u_cmzb1_categ "
+			+ ", item.cest "
+			+ ", item.product_src "
+			+ "from item_b1 item "
+			+ "inner join tax_b1 tax "
+			+ "on item.ncm_code = tax.ncm_code "
+			+ "where tax.last_send_date is null "
+			+ "and item.u_cmzb1_categ is not null", nativeQuery = true)
+	public List<Tuple> findItemTaxesDynamics();
 	
 	@Query(value = "select it.item_code, it.item_name, it.code_bars, cat.code as category, cat.name,"
 			+ "IF(it.u_cmzb1_venda_unit = 'Y', it.sal_pack_msr, it.sal_unit_msr) as unit "

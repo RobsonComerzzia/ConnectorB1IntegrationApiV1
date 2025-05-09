@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import com.seidor.comerzzia.connector.api.v1.model.CategorizacionModel;
-import com.seidor.comerzzia.connector.api.v1.model.input.CategorizacionInput;
+import com.seidor.comerzzia.connector.api.v1.model.DynamicArticuloModel;
+import com.seidor.comerzzia.connector.api.v1.model.input.DynamicArticuloInput;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterCategoryImpl implements RestClientMaster<List<CategorizacionModel>, List<CategorizacionInput>> {
+public class RestClientMasterDynamicsImpl implements RestClientMaster<List<DynamicArticuloModel>, List<DynamicArticuloInput>> {
 
-	private static String NAME_CLASS = "[RestClientMasterCategoryImpl]";
+	private static String NAME_CLASS = "[RestClientMasterDynamicsImpl]";
 	
 	@Override
-	public void executeVoid(List<CategorizacionInput> body, String url, String token) {
+	public void executeVoid(List<DynamicArticuloInput> body, String url, String token) {
 		
 		RestClient restClient = RestClient.builder()
                 .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
@@ -32,7 +32,6 @@ public class RestClientMasterCategoryImpl implements RestClientMaster<List<Categ
 			restClient.post()
 			.uri(url)
 			.body(body)
-			.accept(MediaType.APPLICATION_JSON)
 			.retrieve()		
 	        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
@@ -44,19 +43,19 @@ public class RestClientMasterCategoryImpl implements RestClientMaster<List<Categ
 	         })	
 			.toBodilessEntity();			
 		} catch (Exception e) {
-			log.error("{} - Falha ao atualizar dados de Categorias no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
+			log.error("{} - Falha ao atualizar dados de Dynamics no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
 		
 	}
 
 	@Override
-	public List<CategorizacionModel> execute(List<CategorizacionInput> body, String url, String token) {
+	public List<DynamicArticuloModel> execute(List<DynamicArticuloInput> body, String url, String token) {
 
 		RestClient restClient = RestClient.builder()
                 .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .build();
 		
-		ResponseEntity<List<CategorizacionModel>> categorizacionList = null;
+		ResponseEntity<List<DynamicArticuloModel>> categorizacionList = null;
 		
 		try {
 			categorizacionList = restClient.post()
@@ -72,9 +71,9 @@ public class RestClientMasterCategoryImpl implements RestClientMaster<List<Categ
 	        	String json = new String(res.getBody().readAllBytes());
 	        	log.error("{} - ERRO {}: {}", res.getStatusCode(), NAME_CLASS, json);
 	         })	
-			.toEntity(new ParameterizedTypeReference<List<CategorizacionModel>>() {});			
+			.toEntity(new ParameterizedTypeReference<List<DynamicArticuloModel>>() {});			
 		} catch (Exception e) {
-			log.error("{} - Falha ao atualizar dados de Tarifas no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
+			log.error("{} - Falha ao atualizar dados de Dynamics no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
 		
 		return categorizacionList.getBody();

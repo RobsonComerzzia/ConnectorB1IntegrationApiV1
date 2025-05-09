@@ -109,4 +109,10 @@ public class JsonItemInput implements Serializable {
 	@JsonProperty("U_CMZB1_VendaUnit")
 	private String u_cmzb1_venda_unit;
 	
+	@JsonProperty("ProductSrc")
+	private String productSrc;
+	
+	@JsonProperty("CEST")
+	private String cest;	
+	
 }

@@ -20,10 +20,22 @@ public class ItemTaxResponseModel implements Serializable {
 	
 	private String ncmCode;
 	
-	private String cstIcms;
-	
 	private BigDecimal icms;
 	
+	private BigDecimal pis;
+	
+	private BigDecimal cofins;
+	
+	private String cstIcms;
+	
+	private String cstPis;
+	
+	private String cstCofins;
+	
 	private String category;
+	
+	private String cest;
+	
+	private String productSrc;
 
 }

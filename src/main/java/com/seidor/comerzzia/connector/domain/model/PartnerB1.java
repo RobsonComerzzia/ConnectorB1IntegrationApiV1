@@ -92,6 +92,9 @@ public class PartnerB1 {
 	@Column(name = "block", length = 100, nullable = true)
 	private String block;
 	
+	@Column(name = "city", length = 100, nullable = true)
+	private String city;	
+	
 	@Column(name = "state", length = 2, nullable = true)
 	private String state;	
 	

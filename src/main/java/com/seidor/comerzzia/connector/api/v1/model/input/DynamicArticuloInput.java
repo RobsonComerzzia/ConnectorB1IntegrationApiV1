@@ -1,5 +1,7 @@
 package com.seidor.comerzzia.connector.api.v1.model.input;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,16 +14,14 @@ import lombok.Setter;
 @Getter
 @Builder
 //@JsonInclude(JsonInclude.Include.NON_NULL)
-@Schema(description = "Modelo de input da propriedade dinâmica")
-public class DynamicInput {
+@Schema(description = "Modelo de input de propriedades dinâmicas por produto")
+public class DynamicArticuloInput {
 
-	@Schema(example = "TAX_ALIQUOTA_PIS")
+	@Schema(example = "100103")
 	@NotBlank
-	@JsonProperty("key")
-	private String key;
+	@JsonProperty("itemCode")
+	private String codart;
 	
-	@Schema(example = "1.65")
-	@NotBlank
-	@JsonProperty("value")
-	private String value;
+	@JsonProperty("dynamicProperties")
+	private List<DynamicInput> dynamics;
 }

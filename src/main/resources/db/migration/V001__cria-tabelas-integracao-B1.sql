@@ -14,7 +14,8 @@ create table tax_b1 (
     cst_icms varchar(2) NOT NULL,
     cst_pis varchar(2) NOT NULL,
     cst_cofins varchar(2) NOT NULL,
-    process_date datetime NOT NULL
+    process_date datetime NOT NULL,
+    last_send_date datetime
     /*UNIQUE KEY taxb1_uk (state,ncm)*/
 ) engine=InnoDB default charset=utf8;
 
@@ -43,9 +44,12 @@ create table item_b1 (
 	num_in_sale decimal(13,6),
 	sal_pack_msr varchar(10),
 	sal_pack_unit decimal(13,6),
-	u_cmzb1_venda_unit varchar(1), 
+	u_cmzb1_venda_unit varchar(1),
+	product_src varchar(10),
+	cest varchar(10), 
 	update_date datetime,
 	last_send_date datetime,
+	last_send_date_imp datetime,
     primary key(id),
     UNIQUE KEY itemb1_uk (item_code,ncm_code)
 ) engine=InnoDB default charset=utf8;
@@ -102,6 +106,7 @@ create table partner_b1 (
     update_date_master datetime,
 	street varchar(100),
 	block varchar(150),
+	city varchar(100),
 	state varchar(2),
 	zip_code varchar(20),
 	tax_id0 varchar(50),

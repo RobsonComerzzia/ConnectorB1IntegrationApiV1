@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
-import com.seidor.comerzzia.connector.api.v1.model.ImpTratamientoModel;
-import com.seidor.comerzzia.connector.api.v1.model.input.ArticulosImpuestoInput;
+import com.seidor.comerzzia.connector.api.v1.model.FidelizadoModel;
+import com.seidor.comerzzia.connector.api.v1.model.input.FidelizadoInput;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,72 +17,67 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class RestClientMasterArticulosImpImpl implements RestClientMaster<List<ImpTratamientoModel> ,ArticulosImpuestoInput> {
+public class RestClientMasterFidelizadosImpl implements RestClientMaster<List<FidelizadoModel>, List<FidelizadoInput>> {
 
-	private static String NAME_CLASS = "[RestClientMasterImpl]";
+	private static String NAME_CLASS = "[RestClientMasterFidelizadosImpl]";
 	
 	@Override
-	public void executeVoid(ArticulosImpuestoInput body, String url, String token) {
+	public void executeVoid(List<FidelizadoInput> body, String url, String token) {
 		
-		RestClient restClient = RestClient.create();
+		RestClient restClient = RestClient.builder()
+                .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
+                .build();
 		
 		try {
 			restClient.post()
 			.uri(url)
 			.body(body)
-		    .headers(httpHeaders -> {
-		        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-		        httpHeaders.setBearerAuth(token);
-		    })
 			.accept(MediaType.APPLICATION_JSON)
-			.retrieve()
-	        .onStatus(httpStatusCode -> httpStatusCode.is2xxSuccessful(), (req, res) -> {
-	        	String json = new String(res.getBody().readAllBytes());
-	        	log.info("{} - Sucesso {} : {}", res.getStatusCode(), NAME_CLASS, json);
-	         })
+			.retrieve()	
 	        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
-	        	log.error("{} - Erro {} : {}", res.getStatusCode(), NAME_CLASS, json);
+	        	log.error("{} - Erro {}: {}", res.getStatusCode(), NAME_CLASS, json);
 	         })
 	        .onStatus(httpStatusCode -> httpStatusCode.is5xxServerError(), (req, res) -> {
 	        	String json = new String(res.getBody().readAllBytes());
 	        	log.error("{} - ERRO {}: {}", res.getStatusCode(), NAME_CLASS, json);
 	         })	
-			.toBodilessEntity();			
+			.toBodilessEntity();				
 		} catch (Exception e) {
-			log.error("{} - Falha ao atualizar dados de Impostos no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
+			log.error("{} - Falha ao atualizar dados de Fidelizados no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
 	}
 
 	@Override
-	public List<ImpTratamientoModel> execute(ArticulosImpuestoInput body, String url, String token) {
-	
+	public List<FidelizadoModel> execute(List<FidelizadoInput> body, String url, String token) {
+		
 		RestClient restClient = RestClient.builder()
                 .defaultHeader(org.springframework.http.HttpHeaders.AUTHORIZATION, "Bearer " + token)
                 .build();
 		
-		ResponseEntity<List<ImpTratamientoModel>> response = null;
+		ResponseEntity<List<FidelizadoModel>> fidelizadosList = null;
 		
 		try {
-			response = restClient.post()
+			fidelizadosList = restClient.post()
 					.uri(url)
 					.body(body)
 					.accept(MediaType.APPLICATION_JSON)
-					.retrieve()
+					.retrieve()		
 			        .onStatus(httpStatusCode -> httpStatusCode.is4xxClientError(), (req, res) -> {
 			        	String json = new String(res.getBody().readAllBytes());
-			        	log.error("{} - Erro {} : {}", res.getStatusCode(), NAME_CLASS, json);
+			        	log.error("{} - Erro {}: {}", res.getStatusCode(), NAME_CLASS, json);
 			         })
 			        .onStatus(httpStatusCode -> httpStatusCode.is5xxServerError(), (req, res) -> {
 			        	String json = new String(res.getBody().readAllBytes());
 			        	log.error("{} - ERRO {}: {}", res.getStatusCode(), NAME_CLASS, json);
 			         })	
-			        .toEntity(new ParameterizedTypeReference<List<ImpTratamientoModel>>() {});			
+			        .toEntity(new ParameterizedTypeReference<List<FidelizadoModel>>() {});					
 		} catch (Exception e) {
-			log.error("{} - Falha ao atualizar dados de Impostos no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
+			log.error("{} - Falha ao atualizar dados de Fidelizados no Comerzzia: ", NAME_CLASS, e.getLocalizedMessage());
 		}
 		
-		return response.getBody();
+		return fidelizadosList.getBody();
 	}
+
 
 }

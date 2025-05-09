@@ -101,13 +101,22 @@ public class ItemB1 {
 	private BigDecimal salPackUnit;
 	
 	@Column(name = "u_cmzb1_venda_unit", length = 1, nullable = true)
-	private String u_cmzB1_venda_unit;	
+	private String u_cmzB1_venda_unit;
+	
+	@Column(name = "product_src", length = 10, nullable = true)
+	private String productSrc;
+	
+	@Column(name = "cest", length = 10, nullable = true)
+	private String cest;	
 	
 	@Column(name = "update_date", nullable = true)
 	private LocalDateTime updateDate;
 	
 	@Column(name = "last_send_date", nullable = true)
 	private LocalDateTime lastSendDate;
+	
+	@Column(name = "last_send_date_imp", nullable = true)
+	private LocalDateTime lastSendDateImp;
 	
     @PrePersist
     public void prePersist() {

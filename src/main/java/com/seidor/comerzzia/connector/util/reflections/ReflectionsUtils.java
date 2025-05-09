@@ -50,7 +50,7 @@ public class ReflectionsUtils {
 						method.invoke(obj, valuesParamsMethod);
 					}	
 				}
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | ClassCastException
 						| InvocationTargetException | NoSuchMethodException | ClassNotFoundException | ConstraintViolationException | SecurityException e) {
 				log.error("[ReflectionsUtils] - ERRO: {}", e.getLocalizedMessage());
 			}
