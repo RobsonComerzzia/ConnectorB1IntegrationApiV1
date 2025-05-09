@@ -1,5 +1,7 @@
 package com.seidor.comerzzia.connector.util;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,6 +46,16 @@ public abstract class Utils {
 			.toUpperCase();
 		
 		return item2;
+		
+	}
+	
+	public static String formatNumber(BigDecimal value) {
+		
+		if (value == null)
+			return null;
+		
+		DecimalFormat df = new DecimalFormat("#.00");
+		return df.format(value);
 		
 	}
 	
