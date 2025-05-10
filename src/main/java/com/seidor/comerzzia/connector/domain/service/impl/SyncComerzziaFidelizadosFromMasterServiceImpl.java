@@ -34,7 +34,6 @@ import com.seidor.comerzzia.connector.domain.repository.PartnerB1Repository;
 import com.seidor.comerzzia.connector.domain.repository.TaxB1Repository;
 import com.seidor.comerzzia.connector.rest.client.RestClientMaster;
 import com.seidor.comerzzia.connector.rest.client.RestClientMasterReturn;
-import com.seidor.comerzzia.connector.util.Utils;
 
 import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +42,6 @@ import lombok.extern.slf4j.Slf4j;
 @Order(6)
 @Service
 public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsAbstractComerzzia<List<PartnerResponseModel>> {
-
-    private final PartnerB1Repository partnerB1Repository;
 
 	public SyncComerzziaFidelizadosFromMasterServiceImpl(TaxB1Repository taxB1Repository,
 			ItemB1Repository itemB1Repository, ItemPriceB1Repository itemPriceB1Repository,
@@ -60,7 +57,6 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 		super(taxB1Repository, itemB1Repository, itemPriceB1Repository, itemPriceListB1Repository, categoryB1Repository,
 				partnerB1Repository, restClientArticulos, restClientArticulosImp, restClientTarifa, restClientArticulo,
 				restClientCategorizacion, restClientDynamics, restClientFidelizados);
-		this.partnerB1Repository = partnerB1Repository;
 	}
 
 	@Override
@@ -119,23 +115,25 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 		List<FidelizadoInput> fidelizados = new ArrayList<>();
 		
 		for (PartnerResponseModel item: partners) {
-			FidelizadoInput fidelizado = FidelizadoInput.builder()
-					.nombre(item.getNombre())
-					.apellidos(item.getApellidos())
-					.domicilio(item.getDomicilio())
-					.poblacion(item.getPoblacion())
-					.cp(item.getCp())
-					.localidad(item.getLocalidad())
-					.provincia(item.getProvincia())
-					.codpais(Constants.BR)
-					.codtipoiden(item.getCnpj() != null ? Constants.CNPJ : item.getCpf() != null ? Constants.CPF : null)
-					.documento(item.getCnpj() != null ? item.getCnpj() : item.getCpf() != null ? item.getCpf() : null)
-					.codestcivil("")
-					.fechaNacimiento(null)
-					.observaciones("")
-					.sexo("")
-					.build();
-			fidelizados.add(fidelizado);
+			if (item.getCnpj() != null || item.getCpf() != null) {
+				FidelizadoInput fidelizado = FidelizadoInput.builder()
+						.nombre(item.getNombre())
+						.apellidos(item.getApellidos())
+						.domicilio(item.getDomicilio())
+						.poblacion(item.getPoblacion())
+						.cp(item.getCp())
+						.localidad(item.getLocalidad())
+						.provincia(item.getProvincia())
+						.codpais(Constants.BR)
+						.codtipoiden(codtipodoc(item))
+						.documento(item.getCnpj() != null ? item.getCnpj() : (item.getCpf() != null ? item.getCpf() : null))
+						.codestcivil("")
+						.fechaNacimiento(null)
+						.observaciones("")
+						.sexo("")
+						.build();
+				fidelizados.add(fidelizado);	
+			}
 		}
 		return fidelizados;
 		
@@ -151,11 +149,11 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 					Optional<PartnerB1> partner = Optional.empty();
 					
 					if (p.getDocumento() != null) {
-						partner = partnerB1Repository.findByTaxId0OrTaxId4(Utils.formatarCNPJ(p.getDocumento()), Utils.formatarCPF(p.getDocumento()));
+						partner = partnerB1Repository.findByTaxId0OrTaxId4(p.getDocumento(), p.getDocumento());
 						if (!partner.isPresent())
-							partner = partnerB1Repository.findByCardName(p.getNombre() + " " + p.getApellidos());
+							partner = partnerB1Repository.findByCardNameAndStreet(p.getNombre() + " " + p.getApellidos(), p.getDomicilio());
 					} else
-						partner = partnerB1Repository.findByCardName(p.getNombre() + " " + p.getApellidos());
+						partner = partnerB1Repository.findByCardNameAndStreet(p.getNombre() + " " + p.getApellidos(), p.getDomicilio());
 					
 					if (partner.isPresent()) {
 						partner.get().setLastSendDate(LocalDateTime.now());
@@ -168,6 +166,12 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 			});
 		}
 		
+	}
+	
+	private String codtipodoc(PartnerResponseModel item) {
+		
+		String retorno = item.getCnpj() != null ? Constants.CNPJ : (item.getCpf() != null ? Constants.CPF : null);
+		return retorno;
 	}
 
 }

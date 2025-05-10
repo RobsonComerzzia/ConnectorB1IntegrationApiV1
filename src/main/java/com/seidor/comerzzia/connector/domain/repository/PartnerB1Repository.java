@@ -19,7 +19,7 @@ public interface PartnerB1Repository extends JpaRepository<PartnerB1, PartnerB1.
 	
 	public Optional<PartnerB1> findByTaxId0OrTaxId4(String cnpj, String cpf);
 	
-	public Optional<PartnerB1> findByCardName(String nombre);
+	public Optional<PartnerB1> findByCardNameAndStreet(String nombre, String domicilio);
 	
 	@Query(value = 
 			"select "

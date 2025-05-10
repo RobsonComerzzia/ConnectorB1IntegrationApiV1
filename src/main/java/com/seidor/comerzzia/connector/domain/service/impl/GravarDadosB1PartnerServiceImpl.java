@@ -93,8 +93,8 @@ public class GravarDadosB1PartnerServiceImpl implements GravarDadosB1Service<Lis
 				partnerBase.get().setBlock(partner.getBlock());
 				partnerBase.get().setState(partner.getState());
 				partnerBase.get().setZipCode(partner.getZipCode());
-				partnerBase.get().setTaxId0(partner.getTaxId0());
-				partnerBase.get().setTaxId4(partner.getTaxId4());
+				partnerBase.get().setTaxId0(Utils.cleanString(partner.getTaxId0()));
+				partnerBase.get().setTaxId4(Utils.cleanString(partner.getTaxId4()));
 				partnerBase.get().setCreditLine(partner.getCreditLine());
 				partnerBase.get().setBalance(partner.getBalance());
 				partnersUpdated.add(partnerBase.get());
