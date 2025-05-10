@@ -172,9 +172,9 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 		
 		String retorno = null;
 		
-		if (item.getCnpj().length() > 0) 
+		if (item.getCnpj() != null && item.getCnpj().length() > 0) 
 			retorno = Constants.CNPJ;
-		else if (item.getCpf().length() > 0)
+		else if (item.getCpf() != null && item.getCpf().length() > 0)
 			retorno = Constants.CPF;
 		else 
 			retorno = null;
@@ -186,9 +186,9 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 		
 		String retorno = null;
 		
-		if (item.getCnpj().length() > 0) 
+		if (item.getCnpj() != null && item.getCnpj().length() > 0) 
 			retorno = item.getCnpj();
-		else if (item.getCpf().length() > 0)
+		else if (item.getCnpj() != null && item.getCpf().length() > 0)
 			retorno = item.getCpf();
 		else 
 			retorno = null;
