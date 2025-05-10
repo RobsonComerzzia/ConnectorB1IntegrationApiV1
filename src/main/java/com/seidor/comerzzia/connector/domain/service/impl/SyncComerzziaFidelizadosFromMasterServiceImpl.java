@@ -126,7 +126,7 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 						.provincia(item.getProvincia())
 						.codpais(Constants.BR)
 						.codtipoiden(codtipodoc(item))
-						.documento(item.getCnpj() != null ? item.getCnpj() : (item.getCpf() != null ? item.getCpf() : null))
+						.documento(documento(item))
 						.codestcivil("")
 						.fechaNacimiento(null)
 						.observaciones("")
@@ -170,8 +170,31 @@ public class SyncComerzziaFidelizadosFromMasterServiceImpl extends ConstructorsA
 	
 	private String codtipodoc(PartnerResponseModel item) {
 		
-		String retorno = item.getCnpj() != null ? Constants.CNPJ : (item.getCpf() != null ? Constants.CPF : null);
+		String retorno = null;
+		
+		if (item.getCnpj() != null && item.getCnpj().length() > 0) 
+			retorno = Constants.CNPJ;
+		else if (item.getCpf() != null && item.getCpf().length() > 0)
+			retorno = Constants.CPF;
+		else 
+			retorno = null;
+		
 		return retorno;
+	}
+	
+	private String documento(PartnerResponseModel item) {
+		
+		String retorno = null;
+		
+		if (item.getCnpj() != null && item.getCnpj().length() > 0) 
+			retorno = item.getCnpj();
+		else if (item.getCnpj() != null && item.getCpf().length() > 0)
+			retorno = item.getCpf();
+		else 
+			retorno = null;
+		
+		return retorno;
+		
 	}
 
 }
