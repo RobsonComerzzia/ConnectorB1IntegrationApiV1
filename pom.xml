@@ -161,11 +161,6 @@
 		    <groupId>com.h2database</groupId>
 		    <artifactId>h2</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.seidor.comerzzia</groupId>
-			<artifactId>master-integration-api</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
